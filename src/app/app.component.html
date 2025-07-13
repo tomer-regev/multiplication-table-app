@@ -36,11 +36,55 @@
       <div class="hints-indicator">
         <span>💡 רמזים נותרים: {{ hintsLeft }}</span>
       </div>
+      
+      <!-- New Game button during gameplay -->
+      <div class="new-game-section">
+        <button (click)="newGame()" class="new-game-button">🔄 משחק חדש</button>
+      </div>
     </div>
     
     <div *ngIf="isGameOver">
       <h1>{{ resultMessage }}</h1>
-      <button (click)="startGame()">שחקי שוב</button>
+      
+      <!-- Player name input section -->
+      <div *ngIf="showNameInput" class="name-input-section">
+        <h3>🌟 בואי נשמור את הציון המגניב שלך!</h3>
+        <div class="name-input-form">
+          <input #playerNameInput type="text" [(ngModel)]="playerName" 
+                 placeholder="איך קוראים לך? 😊" 
+                 (keydown.enter)="onPlayerNameSubmit()" 
+                 maxlength="20" />
+          <div class="name-buttons">
+            <button (click)="saveScore()" [disabled]="!playerName.trim()">💾 שמרי ציון</button>
+            <button (click)="skipSaveScore()" class="skip-button">🚀 דלגי</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard section -->
+      <div *ngIf="showLeaderboard" class="leaderboard-section">
+        <h3>🏆 הכוכבות הכי מגניבות - טופ 10!</h3>
+        <div class="leaderboard" *ngIf="topScores.length > 0">
+          <div class="score-entry" *ngFor="let entry of topScores; let i = index" 
+               [ngClass]="{'current-player': entry.name === playerName && entry.score === score}">
+            <div class="rank">{{ i + 1 }}</div>
+            <div class="player-info">
+              <div class="name">{{ entry.name }}</div>
+              <div class="details">{{ entry.correctAnswers }}/{{ entry.totalQuestions }} • {{ entry.date }}</div>
+            </div>
+            <div class="score">{{ entry.score }}</div>
+          </div>
+        </div>
+        <div *ngIf="topScores.length === 0" class="no-scores">
+          עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
+        </div>
+        <button (click)="hideLeaderboard()">🎮 בואי נמשיך</button>
+      </div>
+
+      <!-- Game over buttons (shown when not in name input or leaderboard) -->
+      <div *ngIf="!showNameInput && !showLeaderboard" class="game-over-buttons">
+        <button (click)="startGame()" class="play-again-button">🎯 בואי נשחק שוב!</button>
+      </div>
     </div>
   </div>
 
