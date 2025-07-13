@@ -685,4 +685,137 @@ export class AppComponent implements OnInit {
         });
     }
   }
+
+  shareWithFriends() {
+    // Create an engaging, fun share message
+    const achievements = this.getShareableAchievements();
+    const encouragement = this.getEncouragingMessage();
+    const challenge = this.getFriendChallenge();
+
+    const shareText = `${this.getShareEmoji()} ${encouragement}
+
+🎯 הציון שלי: ${this.score} נקודות!
+💎 יהלומים: ${this.gems}
+🏆 רמה: ${this.level}
+🔥 הרצף הכי טוב: ${this.bestStreak}
+✅ תשובות נכונות: ${this.correctAnswers}/${this.totalQuestions}
+
+${achievements}
+
+${challenge}
+
+בואו תנסו גם! זה משחק הכפל הכי מגניב! 🚀
+${window.location.href}
+
+#משחק_כפל #מתמטיקה_מגניבה #חברות_לנצח`;
+
+    // Try WhatsApp first, then fallback to general sharing
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
+    // Check if we're on mobile
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
+    if (isMobile) {
+      // On mobile, try to open WhatsApp directly
+      window.open(whatsappUrl, "_blank");
+    } else {
+      // On desktop, show options
+      this.showShareOptions(shareText, whatsappUrl);
+    }
+  }
+
+  getShareEmoji(): string {
+    if (this.score >= 80) return "🌟👑";
+    if (this.score >= 60) return "🎉✨";
+    if (this.score >= 40) return "💪🔥";
+    return "🌈💖";
+  }
+
+  getEncouragingMessage(): string {
+    const messages = [
+      "וואו! זה עתה סיימתי את משחק הכפל הקסום!",
+      "יאללה! הרגע עשיתי משהו מדליק במתמטיקה!",
+      "חברות! תראו מה השגתי במשחק הכי מגניב!",
+      "אני פשוט גאונית במתמטיקה! תראו:",
+      "הרגע הפכתי למלכת הכפל! 👑",
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }
+
+  getShareableAchievements(): string {
+    const achievements = [];
+
+    if (this.correctAnswers === this.totalQuestions) {
+      achievements.push("🏆 משחק מושלם - כל התשובות נכונות!");
+    }
+    if (this.bestStreak >= 5) {
+      achievements.push(`🔥 רצף אש של ${this.bestStreak} תשובות נכונות ברצף!`);
+    }
+    if (this.perfectAnswers >= 3) {
+      achievements.push("⚡ מהירות הברק - תשובות מושלמות!");
+    }
+    if (this.gems >= 20) {
+      achievements.push(`💎 אספנית יהלומים מקצועית - ${this.gems} יהלומים!`);
+    }
+    if (this.level >= 3) {
+      achievements.push(`🚀 עליתי לרמה ${this.level} - אני מתקדמת!`);
+    }
+
+    return achievements.length > 0
+      ? `🏅 ההישגים שלي:\n${achievements.join("\n")}\n`
+      : "🌟 אני משתפרת בכל משחק!\n";
+  }
+
+  getFriendChallenge(): string {
+    const challenges = [
+      "🎯 מי מכן מוכנה לאתגר אותי?",
+      "💪 בואו נראה מי תוכל לנצח אותי!",
+      "🏆 מי הולכת להיות המלכה הבאה של הכפל?",
+      "⚡ חברות, בואו נראה מי הכי מהירה!",
+      "🌟 מי רוצה להצטרף למשחק הכי מגניב?",
+    ];
+    return challenges[Math.floor(Math.random() * challenges.length)];
+  }
+
+  showShareOptions(shareText: string, whatsappUrl: string) {
+    const options = [
+      { name: "WhatsApp", url: whatsappUrl, icon: "💬" },
+      {
+        name: "העתק טקסט",
+        action: () => this.copyToClipboard(shareText),
+        icon: "📋",
+      },
+    ];
+
+    // Create a simple modal for desktop sharing options
+    const modal = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div style="background: linear-gradient(135deg, #ff9a9e, #fecfef); padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; margin: 20px;">
+          <h3 style="color: #d63384; margin-bottom: 20px;">📱 שתפי עם החברות שלך!</h3>
+          <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="window.open('${whatsappUrl}', '_blank')" style="background: #25D366; color: white; border: none; padding: 15px 20px; border-radius: 15px; cursor: pointer; font-size: 16px; font-weight: bold;">💬 WhatsApp</button>
+            <button onclick="navigator.clipboard.writeText(\`${shareText.replace(
+              /`/g,
+              "\\`"
+            )}\`).then(() => alert('הטקסט הועתק! 📋')); document.body.removeChild(document.querySelector('[data-share-modal]'))" style="background: #ff6b9d; color: white; border: none; padding: 15px 20px; border-radius: 15px; cursor: pointer; font-size: 16px; font-weight: bold;">📋 העתק</button>
+          </div>
+          <button onclick="document.body.removeChild(document.querySelector('[data-share-modal]'))" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; margin-top: 15px;">❌ סגור</button>
+        </div>
+      </div>
+    `;
+
+    const modalElement = document.createElement("div");
+    modalElement.innerHTML = modal;
+    modalElement.setAttribute("data-share-modal", "true");
+    document.body.appendChild(modalElement);
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("הטקסט הועתק! עכשיו את יכולה להדביק אותו בכל מקום! 📱");
+    });
+  }
 }

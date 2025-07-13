@@ -120,6 +120,7 @@
       <!-- Game over buttons (shown when not in name input or leaderboard) -->
       <div *ngIf="!showNameInput && !showLeaderboard" class="game-over-buttons">
         <button (click)="startGame()" class="play-again-button">🎯 בואי נשחק שוב!</button>
+        <button (click)="shareWithFriends()" class="share-button">📱 שתפי עם חברות!</button>
       </div>
     </div>
   </div>

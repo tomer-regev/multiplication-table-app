@@ -542,6 +542,10 @@
   // Game over buttons
   .game-over-buttons {
     margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 
     .play-again-button {
       padding: 15px 30px;
@@ -554,11 +558,52 @@
       transition: all 0.3s ease;
       box-shadow: 0 6px 18px rgba(255, 107, 157, 0.4);
       font-weight: bold;
+      flex: 1;
+      min-width: 200px;
 
       &:hover {
         background: linear-gradient(135deg, #ff5582, #b83d5a);
         transform: translateY(-3px);
         box-shadow: 0 10px 25px rgba(255, 107, 157, 0.6);
+      }
+    }
+
+    .share-button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+      font-weight: bold;
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        animation: shareShimmer 2s infinite;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, #128c7e, #075e54);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
       }
     }
   }
@@ -1916,6 +1961,15 @@
   to {
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8),
       0 0 20px rgba(0, 206, 209, 0.8);
+  }
+}
+
+@keyframes shareShimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
   }
 }
 
