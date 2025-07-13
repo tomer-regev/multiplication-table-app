@@ -1,3 +1,55 @@
 body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+// Global mobile optimization - prevent scrolling
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+// Mobile-specific global styles
+@media (max-width: 480px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  // Prevent zoom on input focus
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  // Prevent horizontal scrolling
+  * {
+    max-width: 100vw;
+  }
+}
+
+// Ensure app root takes full height
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
