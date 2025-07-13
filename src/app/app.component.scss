@@ -9,7 +9,6 @@
   position: relative;
   min-height: 100vh;
   overflow-y: auto;
-  background: linear-gradient(135deg, #ffeef8, #f8e8ff, #fff0f8);
   border-radius: 0;
   box-shadow: none;
   direction: rtl;
@@ -17,6 +16,71 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  // Female theme (default)
+  &.female-theme {
+    background: linear-gradient(135deg, #ffeef8, #f8e8ff, #fff0f8);
+  }
+
+  // Male theme - darker, more serious
+  &.male-theme {
+    background: linear-gradient(135deg, #2c3e50, #34495e, #3c4f66);
+    color: #ecf0f1;
+
+    .game-status {
+      background: linear-gradient(135deg, #34495e, #2c3e50, #34495e);
+      border-color: #3498db;
+    }
+
+    .question {
+      background: linear-gradient(135deg, #34495e, #2c3e50, #34495e);
+      border-color: #3498db;
+      color: #ecf0f1;
+
+      h2 {
+        color: #3498db;
+      }
+
+      input {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: #ecf0f1;
+        border-color: #3498db;
+
+        &::placeholder {
+          color: #bdc3c7;
+        }
+
+        &:focus {
+          border-color: #2980b9;
+          background: linear-gradient(135deg, #34495e, #2c3e50);
+        }
+      }
+
+      button {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+
+        &:hover:not(:disabled) {
+          background: linear-gradient(135deg, #2980b9, #1f5f8b);
+        }
+      }
+    }
+
+    .indicator {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      border-color: #3498db;
+      color: #ecf0f1;
+
+      .indicator-value {
+        color: #3498db;
+      }
+    }
+
+    .feedback-content {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: #ecf0f1;
+      border-color: #3498db;
+    }
+  }
 
   // Desktop and large screens
   @media (min-width: 1200px) {
@@ -72,6 +136,196 @@
     font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-feature-settings: "kern" 1, "liga" 1;
     -moz-font-feature-settings: "kern" 1, "liga" 1;
+  }
+}
+
+// Player Setup Overlay Styles
+.player-setup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  animation: fadeInScale 0.5s ease-out;
+
+  .player-setup-content {
+    background: linear-gradient(135deg, #fff, #f8f9ff);
+    border: 4px solid #667eea;
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    animation: bounceIn 0.6s ease-out;
+
+    h1 {
+      color: #667eea;
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.3);
+      font-weight: bold;
+    }
+
+    p {
+      color: #4a5568;
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .setup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+
+      .name-input {
+        text-align: right;
+
+        label {
+          display: block;
+          font-size: 1.1em;
+          font-weight: bold;
+          color: #4a5568;
+          margin-bottom: 10px;
+        }
+
+        input {
+          width: 100%;
+          padding: 15px 20px;
+          font-size: 18px;
+          border: 3px solid #667eea;
+          border-radius: 15px;
+          text-align: center;
+          background: linear-gradient(135deg, #fff, #f7fafc);
+          color: #4a5568;
+          font-weight: bold;
+          transition: all 0.3s ease;
+
+          &:focus {
+            border-color: #5a67d8;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+            outline: none;
+            transform: scale(1.02);
+          }
+
+          &::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+          }
+        }
+      }
+
+      .gender-selection {
+        text-align: center;
+
+        label {
+          display: block;
+          font-size: 1.1em;
+          font-weight: bold;
+          color: #4a5568;
+          margin-bottom: 15px;
+        }
+
+        .gender-buttons {
+          display: flex;
+          gap: 20px;
+          justify-content: center;
+          flex-wrap: wrap;
+
+          button {
+            padding: 15px 25px;
+            font-size: 18px;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #fff, #f7fafc);
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            min-width: 120px;
+
+            &:hover {
+              border-color: #667eea;
+              transform: translateY(-2px);
+              box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            }
+
+            &.selected {
+              border-color: #667eea;
+              background: linear-gradient(135deg, #667eea, #764ba2);
+              color: white;
+              box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+              transform: scale(1.05);
+            }
+          }
+        }
+      }
+
+      .start-game-btn {
+        padding: 18px 35px;
+        font-size: 20px;
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        font-weight: bold;
+        margin-top: 10px;
+
+        &:hover {
+          background: linear-gradient(135deg, #38a169, #2f855a);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(72, 187, 120, 0.6);
+        }
+
+        &:active {
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  // Mobile responsive
+  @media (max-width: 768px) {
+    .player-setup-content {
+      padding: 30px 20px;
+      margin: 20px;
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      p {
+        font-size: 1.1em;
+      }
+
+      .setup-form {
+        gap: 20px;
+
+        .gender-selection .gender-buttons {
+          gap: 15px;
+
+          button {
+            min-width: 100px;
+            padding: 12px 20px;
+            font-size: 16px;
+          }
+        }
+
+        .start-game-btn {
+          padding: 15px 30px;
+          font-size: 18px;
+        }
+      }
+    }
   }
 }
 

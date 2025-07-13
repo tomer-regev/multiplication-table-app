@@ -1,4 +1,39 @@
-<div class="app-container">
+<div class="app-container" [ngClass]="getGenderClass()">
+  <!-- Player Setup Screen -->
+  <div *ngIf="showPlayerSetup" class="player-setup-overlay">
+    <div class="player-setup-content">
+      <h1>🎯 ברוכים הבאים למשחק הכפל הקסום! 🎯</h1>
+      <p>בואו נכיר! איך קוראים לך ומה המגדר שלך?</p>
+      
+      <div class="setup-form">
+        <div class="name-input">
+          <label>השם שלך:</label>
+          <input type="text" [(ngModel)]="playerName" placeholder="איך קוראים לך?" maxlength="20" />
+        </div>
+        
+        <div class="gender-selection">
+          <label>בחר מגדר:</label>
+          <div class="gender-buttons">
+            <button 
+              [ngClass]="{'selected': playerGender === 'female'}"
+              (click)="playerGender = 'female'">
+              👧 בת
+            </button>
+            <button 
+              [ngClass]="{'selected': playerGender === 'male'}"
+              (click)="playerGender = 'male'">
+              👦 בן
+            </button>
+          </div>
+        </div>
+        
+        <button (click)="setupPlayer()" class="start-game-btn">
+          🚀 בואו נתחיל לשחק!
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Confetti Animation -->
   <div *ngIf="showConfetti" class="confetti-container">
     <div class="confetti" *ngFor="let i of [].constructor(50); let idx = index" [style.animation-delay.s]="idx * 0.1"></div>
@@ -69,7 +104,7 @@
       
       <!-- Hints indicator -->
       <div class="hints-indicator">
-        <span>💡 כוח-על נותר: {{ hintsLeft }} רמזים</span>
+        <span>{{ getGenderText('💡 כוח-על נותר: ' + hintsLeft + ' רמזים', '💡 כוח-על נותר: ' + hintsLeft + ' רמזים') }}</span>
       </div>
       
       <!-- New Game and Hall of Fame buttons during gameplay -->
@@ -84,10 +119,10 @@
       
       <!-- Player name input section -->
       <div *ngIf="showNameInput" class="name-input-section">
-        <h3>🌟 וואו! בואי נשמור את הציון הפצצה שלך!</h3>
+        <h3>{{ getGenderText('🌟 וואו! בוא נשמור את הציון הפצצה שלך!', '🌟 וואו! בואי נשמור את הציון הפצצה שלך!') }}</h3>
         <div class="name-input-form">
           <input #playerNameInput type="text" [(ngModel)]="playerName" 
-                 placeholder="איך קוראים למלכת הכפל? 😊" 
+                 placeholder="{{ getGenderText('איך קוראים למלך הכפל? 😊', 'איך קוראים למלכת הכפל? 😊') }}" 
                  (keydown.enter)="onPlayerNameSubmit()" 
                  maxlength="20" />
           <div class="name-buttons">
@@ -99,7 +134,7 @@
 
       <!-- Leaderboard section -->
       <div *ngIf="showLeaderboard" class="leaderboard-section">
-        <h3>🏆 היכל התהילה - הגאוניות הכי מגניבות!</h3>
+        <h3>{{ getGenderText('🏆 היכל התהילה - הגאונים הכי מגניבים!', '🏆 היכל התהילה - הגאוניות הכי מגניבות!') }}</h3>
         <div class="leaderboard" *ngIf="topScores.length > 0">
           <div class="score-entry" *ngFor="let entry of topScores; let i = index" 
                [ngClass]="{'current-player': entry.name === playerName && entry.score === score}">
@@ -112,20 +147,20 @@
           </div>
         </div>
         <div *ngIf="topScores.length === 0" class="no-scores">
-          עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨
+          {{ getGenderText('עוד אין גאונים כאן... אתה יכול להיות הראשון! ✨', 'עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨') }}
         </div>
         
         <!-- Share and Continue buttons -->
         <div class="leaderboard-actions">
-          <button (click)="shareWithFriends()" class="share-from-leaderboard-button">📱 תראי לחברות מי הבוס!</button>
-          <button (click)="hideLeaderboard()" class="continue-button">🎮 בואי נמשיך לשבור שיאים!</button>
+          <button (click)="shareWithFriends()" class="share-from-leaderboard-button">{{ getGenderText('📱 תראה לחברים מי הבוס!', '📱 תראי לחברות מי הבוס!') }}</button>
+          <button (click)="hideLeaderboard()" class="continue-button">{{ getGenderText('🎮 בוא נמשיך לשבור שיאים!', '🎮 בואי נמשיך לשבור שיאים!') }}</button>
         </div>
       </div>
 
       <!-- Game over buttons (shown when not in name input or leaderboard) -->
       <div *ngIf="!showNameInput && !showLeaderboard" class="game-over-buttons">
-        <button (click)="startGame()" class="play-again-button">🎯 עוד סיבוב? בואי נשבור שיאים!</button>
-        <button (click)="shareWithFriends()" class="share-button">📱 תראי לחברות מי הגאונית!</button>
+        <button (click)="startGame()" class="play-again-button">{{ getGenderText('🎯 עוד סיבוב? בוא נשבור שיאים!', '🎯 עוד סיבוב? בואי נשבור שיאים!') }}</button>
+        <button (click)="shareWithFriends()" class="share-button">{{ getGenderText('📱 תראה לחברים מי הגאון!', '📱 תראי לחברות מי הגאונית!') }}</button>
       </div>
     </div>
   </div>
@@ -141,8 +176,8 @@
       </div>
       <div class="feedback-message">{{ feedbackMessage }}</div>
       <button (click)="closeFeedback()" class="feedback-continue">
-        <span *ngIf="feedbackType === 'correct'">🚀 יאללה! עוד אחת!</span>
-        <span *ngIf="feedbackType === 'wrong'">💪 אוקיי, בואי נתקוף שוב!</span>
+        <span *ngIf="feedbackType === 'correct'">{{ getGenderText('🚀 יאללה! עוד אחד!', '🚀 יאללה! עוד אחת!') }}</span>
+        <span *ngIf="feedbackType === 'wrong'">{{ getGenderText('💪 אוקיי, בוא נתקוף שוב!', '💪 אוקיי, בואי נתקוף שוב!') }}</span>
       </button>
     </div>
   </div>
@@ -150,7 +185,7 @@
   <!-- Hall of Fame Overlay (during gameplay) -->
   <div *ngIf="showHallOfFameOverlay" class="hall-of-fame-overlay">
     <div class="hall-of-fame-content">
-      <h3>🏆 היכל התהילה - הגאוניות הכי מגניבות!</h3>
+      <h3>{{ getGenderText('🏆 היכל התהילה - הגאונים הכי מגניבים!', '🏆 היכל התהילה - הגאוניות הכי מגניבות!') }}</h3>
       <div class="leaderboard" *ngIf="topScores.length > 0">
         <div class="score-entry" *ngFor="let entry of topScores; let i = index">
           <div class="rank">{{ i + 1 }}</div>
@@ -162,7 +197,7 @@
         </div>
       </div>
       <div *ngIf="topScores.length === 0" class="no-scores">
-        עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨
+        {{ getGenderText('עוד אין גאונים כאן... אתה יכול להיות הראשון! ✨', 'עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨') }}
       </div>
       <button (click)="hideHallOfFame()" class="close-hall-button">❌ חזרה למשחק!</button>
     </div>
@@ -320,7 +355,7 @@
     <!-- Hint section -->
     <div class="hint-section">
       <button (click)="useHint()" [disabled]="hintsLeft === 0 || hintUsed || isAnswering" class="hint-button">
-        💡 כוח-על! ({{ hintsLeft }} נותרים)
+        {{ getGenderText('💡 כוח-על! (' + hintsLeft + ' נותרים)', '💡 כוח-על! (' + hintsLeft + ' נותרים)') }}
       </button>
       <div *ngIf="currentHint" class="hint-display">
         {{ currentHint }}
@@ -332,7 +367,7 @@
       <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="מה התשובה?" 
              (keydown.enter)="onSubmitAnswer()" inputmode="numeric" />
       <button (click)="onSubmitAnswer()" [disabled]="isAnswering || userAnswer === undefined">
-        {{ isAnswering ? 'חושבת...' : 'יאללה!' }}
+        {{ isAnswering ? getGenderText('חושב...', 'חושבת...') : 'יאללה!' }}
       </button>
     </div>
   </div>

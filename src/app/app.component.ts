@@ -61,6 +61,8 @@ export class AppComponent implements OnInit {
 
   // Player and scoring
   playerName: string = "";
+  playerGender: "male" | "female" | "" = "";
+  showPlayerSetup: boolean = true;
   showNameInput: boolean = false;
   showLeaderboard: boolean = false;
   topScores: ScoreEntry[] = [];
@@ -76,7 +78,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTopScores();
-    this.startGame();
+    // Don't start game until player setup is complete
   }
 
   startGame() {
@@ -89,7 +91,6 @@ export class AppComponent implements OnInit {
     this.showConfetti = false;
     this.showNameInput = false;
     this.showLeaderboard = false;
-    this.playerName = "";
 
     // Reset enhanced features
     this.streak = 0;
@@ -99,6 +100,32 @@ export class AppComponent implements OnInit {
     this.perfectAnswers = 0;
 
     this.askNewQuestion();
+  }
+
+  setupPlayer() {
+    if (!this.playerName.trim()) {
+      alert(
+        this.getGenderText(
+          "בבקשה תכתוב את השם שלך! 😊",
+          "בבקשה תכתבי את השם שלך! 😊"
+        )
+      );
+      return;
+    }
+    if (!this.playerGender) {
+      alert("בבקשה תבחר מגדר! 😊");
+      return;
+    }
+    this.showPlayerSetup = false;
+    this.startGame();
+  }
+
+  getGenderText(maleText: string, femaleText: string): string {
+    return this.playerGender === "male" ? maleText : femaleText;
+  }
+
+  getGenderClass(): string {
+    return this.playerGender === "male" ? "male-theme" : "female-theme";
   }
 
   newGame() {
@@ -205,15 +232,35 @@ export class AppComponent implements OnInit {
       // Create enhanced feedback message
       let correctMessage = "";
       if (this.streak >= 5) {
-        correctMessage = `🔥 FIRE! COMBO x${this.currentComboMultiplier.toFixed(
-          1
-        )}! את בוערת! רצף של ${
-          this.streak
-        }! +${questionScore} נקודות +${gemsEarned}💎`;
+        correctMessage = this.getGenderText(
+          `🔥 FIRE! COMBO x${this.currentComboMultiplier.toFixed(
+            1
+          )}! אתה בוער! רצף של ${
+            this.streak
+          }! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 FIRE! COMBO x${this.currentComboMultiplier.toFixed(
+            1
+          )}! את בוערת! רצף של ${
+            this.streak
+          }! +${questionScore} נקודות +${gemsEarned}💎`
+        );
       } else if (this.streak >= 3) {
-        correctMessage = `⚡ את על הגז! ${this.streak} ברצף! המוח שלך עובד כמו מחשב! +${questionScore} נקודות +${gemsEarned}💎`;
+        correctMessage = this.getGenderText(
+          `⚡ אתה על הגז! ${this.streak} ברצף! המוח שלך עובד כמו מחשב! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⚡ את על הגז! ${this.streak} ברצף! המוח שלך עובד כמו מחשב! +${questionScore} נקודות +${gemsEarned}💎`
+        );
       } else {
-        const messages = [
+        const maleMessages = [
+          `🎉 בום! נכון! אתה גאון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 וואו! המוח שלך זה פצצה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⭐ יש! אתה מלך! +${questionScore} נקודות +${gemsEarned}💎`,
+          `💪 חזק! אתה מכונת חישוב! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🚀 מטורף! אתה עף! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 בול! אתה חד כמו חץ! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⚔️ אגדי! אתה לוחם מתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🦅 מושלם! אתה נשר של המספרים! +${questionScore} נקודות +${gemsEarned}💎`,
+        ];
+        const femaleMessages = [
           `🎉 בום! נכון! את גאונית! +${questionScore} נקודות +${gemsEarned}💎`,
           `🔥 וואו! המוח שלך זה פצצה! +${questionScore} נקודות +${gemsEarned}💎`,
           `⭐ יש! את מלכה! +${questionScore} נקודות +${gemsEarned}💎`,
@@ -223,6 +270,8 @@ export class AppComponent implements OnInit {
           `✨ קסם! את קוסמת במתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
           `🦄 אגדי! את חד-קרן של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
         ];
+        const messages =
+          this.playerGender === "male" ? maleMessages : femaleMessages;
         correctMessage = messages[Math.floor(Math.random() * messages.length)];
       }
 
@@ -237,13 +286,22 @@ export class AppComponent implements OnInit {
       const correctAnswer = this.currentQuestion?.answer;
       const hint = this.getHintForNumbers({ num1, num2 });
 
-      const wrongMessages = [
+      const maleWrongMessages = [
+        `🤔 אופס! לא הפעם... אבל זה בסדר, גם איינשטיין טעה לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😅 אוי לא! קרוב אבל לא מספיק... המוח שלך עדיין מתחמם!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🙃 נו טוב, לא כל אחד יכול להיות מחשבון אנושי!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤷‍♂️ זה קורה לטובים שבבנים! בוא ננסה שוב!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😊 לא נורא! גם סופר-גיבורים לומדים מטעויות!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+      ];
+      const femaleWrongMessages = [
         `🤔 אופס! לא הפעם... אבל זה בסדר, גם איינשטיין טעה לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
         `😅 אוי לא! קרוב אבל לא מספיק... המוח שלך עדיין מתחמם!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
         `🙃 נו טוב, לא כל אחת יכולה להיות מחשבון אנושי!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
         `🤷‍♀️ זה קורה לטובות שבנות! בואי ננסה שוב!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
         `😊 לא נורא! גם סופר-גיבורות לומדות מטעויות!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
       ];
+      const wrongMessages =
+        this.playerGender === "male" ? maleWrongMessages : femaleWrongMessages;
       const wrongMessage =
         wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
       this.showFeedbackAnimation("wrong", wrongMessage);
@@ -289,7 +347,17 @@ export class AppComponent implements OnInit {
     clearInterval(this.timer);
     this.isGameOver = true;
     if (this.correctAnswers === this.totalQuestions) {
-      const winMessages = [
+      const maleWinMessages = [
+        `🎉 BOOM! אתה מלך המתמטיקה! ציון סופי: ${this.score} נקודות`,
+        `🔥 וואו! אתה פשוט אש! המוח שלך זה מחשב-על! ציון סופי: ${this.score} נקודות`,
+        `⭐ יאללה! אתה כוכב! כל המורים יהיו בהלם! ציון סופי: ${this.score} נקודות`,
+        `👑 אתה לא סתם מלך - אתה קיסר הכפל! ציון סופי: ${this.score} נקודות`,
+        `🚀 מטורף! אתה עף לחלל! נאס"א רוצה אותך! ציון סופי: ${this.score} נקודות`,
+        `⚔️ אגדי! אתה לוחם המתמטיקה! ציון סופי: ${this.score} נקודות`,
+        `💎 יהלום! אתה יקר מכל האוצרות! ציון סופי: ${this.score} נקודות`,
+        `🎯 בול פגיעה! אתה צלף של המספרים! ציון סופי: ${this.score} נקודות`,
+      ];
+      const femaleWinMessages = [
         `🎉 BOOM! את מלכת המתמטיקה! ציון סופי: ${this.score} נקודות`,
         `🔥 וואו! את פשוט אש! המוח שלך זה מחשב-על! ציון סופי: ${this.score} נקודות`,
         `⭐ יאללה! את כוכבת! כל המורים יהיו בהלם! ציון סופי: ${this.score} נקודות`,
@@ -299,6 +367,8 @@ export class AppComponent implements OnInit {
         `💎 יהלום! את יקרה מכל האוצרות! ציון סופי: ${this.score} נקודות`,
         `🎯 בול פגיעה! את צלפנית של המספרים! ציון סופי: ${this.score} נקודות`,
       ];
+      const winMessages =
+        this.playerGender === "male" ? maleWinMessages : femaleWinMessages;
       this.resultMessage =
         winMessages[Math.floor(Math.random() * winMessages.length)];
       this.showConfetti = true;
@@ -307,7 +377,15 @@ export class AppComponent implements OnInit {
         this.showConfetti = false;
       }, 5000);
     } else {
-      const loseMessages = [
+      const maleLoseMessages = [
+        `😊 זה בסדר! גם מיקי מאוס לא נולד יודע לספור! ציון: ${this.score} נקודות`,
+        `💪 כמעט! אתה כמו גיבור-על שמתאמן! ציון: ${this.score} נקודות`,
+        `🌟 לא נורא! גם ספיידרמן היה צריך להתאמן! ציון: ${this.score} נקודות`,
+        `🎯 זה תהליך! כמו ללמוד לרכב על אופניים! ציון: ${this.score} נקודות`,
+        `🦅 אתה כמו נשר - עוד מעט תפרוש כנפיים ותעוף! ציון: ${this.score} נקודות`,
+        `🌈 אחרי הגשם תמיד יש קשת! בפעם הבאה תהיה מושלם! ציון: ${this.score} נקודות`,
+      ];
+      const femaleLoseMessages = [
         `😊 זה בסדר! גם מיקי מאוס לא נולד יודע לספור! ציון: ${this.score} נקודות`,
         `💪 כמעט! את כמו גיבורת-על שמתאמנת! ציון: ${this.score} נקודות`,
         `🌟 לא נורא! גם אלזה מפרוזן הייתה צריכה להתאמן! ציון: ${this.score} נקודות`,
@@ -315,6 +393,8 @@ export class AppComponent implements OnInit {
         `🦋 את כמו פרפר - עוד מעט תפרשי כנפיים ותעופי! ציון: ${this.score} נקודות`,
         `🌈 אחרי הגשם תמיד יש קשת! בפעם הבאה תהיי מושלמת! ציון: ${this.score} נקודות`,
       ];
+      const loseMessages =
+        this.playerGender === "male" ? maleLoseMessages : femaleLoseMessages;
       this.resultMessage =
         loseMessages[Math.floor(Math.random() * loseMessages.length)];
     }
