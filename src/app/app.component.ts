@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import {
-  CloudStorageService,
-  ScoreEntry,
-} from "./services/cloud-storage.service";
+// import {
+//   CloudStorageService,
+//   ScoreEntry,
+// } from "./services/cloud-storage.service";
+
+import { FirebaseService, ScoreEntry } from "./services/firebase.service";
 
 @Component({
   selector: "app-root",
@@ -13,7 +15,7 @@ export class AppComponent implements OnInit {
   @ViewChild("userAnswerInput") userAnswerInput!: ElementRef<HTMLInputElement>;
   @ViewChild("playerNameInput") playerNameInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private cloudStorageService: CloudStorageService) {}
+  constructor(private firebaseService: FirebaseService) {}
 
   maxFailures: number = 3;
   totalQuestions: number = 10;
@@ -375,7 +377,7 @@ export class AppComponent implements OnInit {
   // Score persistence methods using Cloud Storage
   async loadTopScores() {
     try {
-      this.topScores = await this.cloudStorageService.getTopScores();
+      this.topScores = await this.firebaseService.getTopScores();
     } catch (error) {
       console.error("שגיאה בטעינת הציונים:", error);
     }
@@ -396,7 +398,7 @@ export class AppComponent implements OnInit {
     };
 
     try {
-      await this.cloudStorageService.saveScore(newScore);
+      await this.firebaseService.saveScore(newScore);
       // Reload the leaderboard to show updated scores
       await this.loadTopScores();
       this.showNameInput = false;
