@@ -69,7 +69,7 @@
       
       <!-- Hints indicator -->
       <div class="hints-indicator">
-        <span>💡 רמזים נותרים: {{ hintsLeft }}</span>
+        <span>💡 כוח-על נותר: {{ hintsLeft }} רמזים</span>
       </div>
       
       <!-- New Game and Hall of Fame buttons during gameplay -->
@@ -84,10 +84,10 @@
       
       <!-- Player name input section -->
       <div *ngIf="showNameInput" class="name-input-section">
-        <h3>🌟 בואי נשמור את הציון המגניב שלך!</h3>
+        <h3>🌟 וואו! בואי נשמור את הציון הפצצה שלך!</h3>
         <div class="name-input-form">
           <input #playerNameInput type="text" [(ngModel)]="playerName" 
-                 placeholder="איך קוראים לך? 😊" 
+                 placeholder="איך קוראים למלכת הכפל? 😊" 
                  (keydown.enter)="onPlayerNameSubmit()" 
                  maxlength="20" />
           <div class="name-buttons">
@@ -99,7 +99,7 @@
 
       <!-- Leaderboard section -->
       <div *ngIf="showLeaderboard" class="leaderboard-section">
-        <h3>🏆 הכוכבות הכי מגניבות - טופ 10!</h3>
+        <h3>🏆 היכל התהילה - הגאוניות הכי מגניבות!</h3>
         <div class="leaderboard" *ngIf="topScores.length > 0">
           <div class="score-entry" *ngFor="let entry of topScores; let i = index" 
                [ngClass]="{'current-player': entry.name === playerName && entry.score === score}">
@@ -112,20 +112,20 @@
           </div>
         </div>
         <div *ngIf="topScores.length === 0" class="no-scores">
-          עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
+          עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨
         </div>
         
         <!-- Share and Continue buttons -->
         <div class="leaderboard-actions">
-          <button (click)="shareWithFriends()" class="share-from-leaderboard-button">📱 שתפי עם חברות!</button>
-          <button (click)="hideLeaderboard()" class="continue-button">🎮 בואי נמשיך</button>
+          <button (click)="shareWithFriends()" class="share-from-leaderboard-button">📱 תראי לחברות מי הבוס!</button>
+          <button (click)="hideLeaderboard()" class="continue-button">🎮 בואי נמשיך לשבור שיאים!</button>
         </div>
       </div>
 
       <!-- Game over buttons (shown when not in name input or leaderboard) -->
       <div *ngIf="!showNameInput && !showLeaderboard" class="game-over-buttons">
-        <button (click)="startGame()" class="play-again-button">🎯 בואי נשחק שוב!</button>
-        <button (click)="shareWithFriends()" class="share-button">📱 שתפי עם חברות!</button>
+        <button (click)="startGame()" class="play-again-button">🎯 עוד סיבוב? בואי נשבור שיאים!</button>
+        <button (click)="shareWithFriends()" class="share-button">📱 תראי לחברות מי הגאונית!</button>
       </div>
     </div>
   </div>
@@ -141,8 +141,8 @@
       </div>
       <div class="feedback-message">{{ feedbackMessage }}</div>
       <button (click)="closeFeedback()" class="feedback-continue">
-        <span *ngIf="feedbackType === 'correct'">🚀 בואי נמשיך!</span>
-        <span *ngIf="feedbackType === 'wrong'">💪 הבנתי, בואי נמשיך!</span>
+        <span *ngIf="feedbackType === 'correct'">🚀 יאללה! עוד אחת!</span>
+        <span *ngIf="feedbackType === 'wrong'">💪 אוקיי, בואי נתקוף שוב!</span>
       </button>
     </div>
   </div>
@@ -150,7 +150,7 @@
   <!-- Hall of Fame Overlay (during gameplay) -->
   <div *ngIf="showHallOfFameOverlay" class="hall-of-fame-overlay">
     <div class="hall-of-fame-content">
-      <h3>🏆 היכל התהילה - הכוכבות הכי מגניבות!</h3>
+      <h3>🏆 היכל התהילה - הגאוניות הכי מגניבות!</h3>
       <div class="leaderboard" *ngIf="topScores.length > 0">
         <div class="score-entry" *ngFor="let entry of topScores; let i = index">
           <div class="rank">{{ i + 1 }}</div>
@@ -162,9 +162,9 @@
         </div>
       </div>
       <div *ngIf="topScores.length === 0" class="no-scores">
-        עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
+        עוד אין גאוניות כאן... את יכולה להיות הראשונה! ✨
       </div>
-      <button (click)="hideHallOfFame()" class="close-hall-button">❌ סגרי</button>
+      <button (click)="hideHallOfFame()" class="close-hall-button">❌ חזרה למשחק!</button>
     </div>
   </div>
 
@@ -320,7 +320,7 @@
     <!-- Hint section -->
     <div class="hint-section">
       <button (click)="useHint()" [disabled]="hintsLeft === 0 || hintUsed || isAnswering" class="hint-button">
-        💡 השתמשי ברמז ({{ hintsLeft }} נותרים)
+        💡 כוח-על! ({{ hintsLeft }} נותרים)
       </button>
       <div *ngIf="currentHint" class="hint-display">
         {{ currentHint }}
@@ -329,10 +329,10 @@
     
     <!-- Mobile-friendly answer section -->
     <div class="answer-section">
-      <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="התשובה שלך" 
+      <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="מה התשובה?" 
              (keydown.enter)="onSubmitAnswer()" inputmode="numeric" />
       <button (click)="onSubmitAnswer()" [disabled]="isAnswering || userAnswer === undefined">
-        {{ isAnswering ? 'מעבדת...' : 'שלחי' }}
+        {{ isAnswering ? 'חושבת...' : 'יאללה!' }}
       </button>
     </div>
   </div>

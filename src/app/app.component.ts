@@ -205,18 +205,23 @@ export class AppComponent implements OnInit {
       // Create enhanced feedback message
       let correctMessage = "";
       if (this.streak >= 5) {
-        correctMessage = `🔥 COMBO x${this.currentComboMultiplier.toFixed(
+        correctMessage = `🔥 FIRE! COMBO x${this.currentComboMultiplier.toFixed(
           1
-        )}! רצף של ${this.streak}! +${questionScore} נקודות +${gemsEarned}💎`;
+        )}! את בוערת! רצף של ${
+          this.streak
+        }! +${questionScore} נקודות +${gemsEarned}💎`;
       } else if (this.streak >= 3) {
-        correctMessage = `⚡ רצף מדליק! ${this.streak} ברצף! +${questionScore} נקודות +${gemsEarned}💎`;
+        correctMessage = `⚡ את על הגז! ${this.streak} ברצף! המוח שלך עובד כמו מחשב! +${questionScore} נקודות +${gemsEarned}💎`;
       } else {
         const messages = [
-          `🎉 יאללה! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🔥 מדליק! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
-          `⭐ וואו! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
-          `💪 חזק! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🚀 מושלם! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎉 בום! נכון! את גאונית! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 וואו! המוח שלך זה פצצה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⭐ יש! את מלכה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `💪 חזק! את מכונת חישוב! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🚀 מטורף! את עפה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 בול! את חדה כמו חץ! +${questionScore} נקודות +${gemsEarned}💎`,
+          `✨ קסם! את קוסמת במתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🦄 אגדי! את חד-קרן של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
         ];
         correctMessage = messages[Math.floor(Math.random() * messages.length)];
       }
@@ -232,7 +237,15 @@ export class AppComponent implements OnInit {
       const correctAnswer = this.currentQuestion?.answer;
       const hint = this.getHintForNumbers({ num1, num2 });
 
-      const wrongMessage = `❌ אופס! לא נכון הפעם...\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`;
+      const wrongMessages = [
+        `🤔 אופס! לא הפעם... אבל זה בסדר, גם איינשטיין טעה לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😅 אוי לא! קרוב אבל לא מספיק... המוח שלך עדיין מתחמם!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🙃 נו טוב, לא כל אחת יכולה להיות מחשבון אנושי!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤷‍♀️ זה קורה לטובות שבנות! בואי ננסה שוב!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😊 לא נורא! גם סופר-גיבורות לומדות מטעויות!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+      ];
+      const wrongMessage =
+        wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
       this.showFeedbackAnimation("wrong", wrongMessage);
     }
 
@@ -277,11 +290,14 @@ export class AppComponent implements OnInit {
     this.isGameOver = true;
     if (this.correctAnswers === this.totalQuestions) {
       const winMessages = [
-        `🎉 וואו! את מלכה! ציון סופי: ${this.score} נקודות`,
-        `🔥 מדליק! את גאונית! ציון סופי: ${this.score} נקודות`,
-        `⭐ יאללה! את הכי! ציון סופי: ${this.score} נקודות`,
-        `👑 את אלופה! ציון סופי: ${this.score} נקודות`,
-        `🚀 מושלם! את פצצה! ציון סופי: ${this.score} נקודות`,
+        `🎉 BOOM! את מלכת המתמטיקה! ציון סופי: ${this.score} נקודות`,
+        `🔥 וואו! את פשוט אש! המוח שלך זה מחשב-על! ציון סופי: ${this.score} נקודות`,
+        `⭐ יאללה! את כוכבת! כל המורים יהיו בהלם! ציון סופי: ${this.score} נקודות`,
+        `👑 את לא סתם מלכה - את קיסרית הכפל! ציון סופי: ${this.score} נקודות`,
+        `🚀 מטורף! את עפה לחלל! נאס"א רוצה אותך! ציון סופי: ${this.score} נקודות`,
+        `🦄 אגדי! את חד-קרן של המתמטיקה! ציון סופי: ${this.score} נקודות`,
+        `💎 יהלום! את יקרה מכל האוצרות! ציון סופי: ${this.score} נקודות`,
+        `🎯 בול פגיעה! את צלפנית של המספרים! ציון סופי: ${this.score} נקודות`,
       ];
       this.resultMessage =
         winMessages[Math.floor(Math.random() * winMessages.length)];
@@ -292,10 +308,12 @@ export class AppComponent implements OnInit {
       }, 5000);
     } else {
       const loseMessages = [
-        `😊 זה בסדר! נסי שוב! ציון: ${this.score} נקודות`,
-        `💪 כמעט! את תצליחי בפעם הבאה! ציון: ${this.score} נקודות`,
-        `🌟 לא נורא! תתרגלי עוד קצת! ציון: ${this.score} נקודות`,
-        `🎯 זה תהליך! בפעם הבאה יהיה יותר טוב! ציון: ${this.score} נקודות`,
+        `😊 זה בסדר! גם מיקי מאוס לא נולד יודע לספור! ציון: ${this.score} נקודות`,
+        `💪 כמעט! את כמו גיבורת-על שמתאמנת! ציון: ${this.score} נקודות`,
+        `🌟 לא נורא! גם אלזה מפרוזן הייתה צריכה להתאמן! ציון: ${this.score} נקודות`,
+        `🎯 זה תהליך! כמו ללמוד לרכב על אופניים! ציון: ${this.score} נקודות`,
+        `🦋 את כמו פרפר - עוד מעט תפרשי כנפיים ותעופי! ציון: ${this.score} נקודות`,
+        `🌈 אחרי הגשם תמיד יש קשת! בפעם הבאה תהיי מושלמת! ציון: ${this.score} נקודות`,
       ];
       this.resultMessage =
         loseMessages[Math.floor(Math.random() * loseMessages.length)];
@@ -749,11 +767,14 @@ export class AppComponent implements OnInit {
 
   getFriendChallenge(): string {
     const challenges = [
-      "🎯 מי מכן מוכנה לאתגר אותי?",
-      "💪 בואו נראה מי תוכל לנצח אותי!",
-      "🏆 מי הולכת להיות המלכה הבאה של הכפל?",
-      "⚡ חברות, בואו נראה מי הכי מהירה!",
-      "🌟 מי רוצה להצטרף למשחק הכי מגניב?",
+      "🎯 מי מכן חושבת שהיא יכולה לנצח אותי? בואו נראה!",
+      "💪 חברות! מי מוכנה לקרב מוחות? אני מחכה!",
+      "🏆 מי הולכת להיות המלכה הבאה של הכפל? תתגרו בי!",
+      "⚡ בואו נראה מי הכי מהירה במתמטיקה! אני מאתגרת!",
+      "🌟 מי רוצה להצטרף למשחק הכי מגניב? בואו נתחרה!",
+      "🔥 מי חושבת שהמוח שלה מהיר יותר משלי? בואו נבדוק!",
+      "🚀 חברות! מי מוכנה למשחק מוחות? אני מחכה לכן!",
+      "💎 מי רוצה להיות חלק מהכנופיה הכי חכמה? בואו!",
     ];
     return challenges[Math.floor(Math.random() * challenges.length)];
   }
@@ -871,11 +892,14 @@ export class AppComponent implements OnInit {
 
   getMotivationalMessage(): string {
     const messages = [
-      "את פשוט מדהימה במתמטיקה! 🌟",
-      "איזה כישרון יש לך! 💫",
-      "את הוכחת שמתמטיקה זה כיף! 🎉",
-      "הישגים כאלה מראים כמה את מוכשרת! ✨",
-      "את מקור השראה לכל הבנות! 👑",
+      "את פשוט אש במתמטיקה! המוח שלך זה מחשב-על! 🌟",
+      "וואו! איזה כישרון! את כמו קוסמת של המספרים! 💫",
+      "את הוכחת שמתמטיקה זה לא משעמם - זה מגניב! 🎉",
+      "הישגים כאלה? את פשוט גאונית! 🧠✨",
+      "את מקור השראה לכל הבנות! מלכת הכפל! 👑",
+      "המורה שלך תהיה בהלם מהכישרון שלך! 🤯",
+      "את כמו גיבורת-על של המתמטיקה! 🦸‍♀️",
+      "המוח שלך עובד מהר יותר מאייפון! 📱⚡",
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   }
@@ -998,16 +1022,19 @@ export class AppComponent implements OnInit {
     const avatar = this.getAvatarCharacter();
     const rank = this.getScoreRank();
 
-    return `${avatar} הרגע השגתי ${this.score} נקודות במשחק הכפל הקסום! 
+    return `${avatar} בום! הרגע הרסתי את משחק הכפל הקסום! 
     
 🏆 רמה ${this.level} | 💎 ${this.gems} יהלומים | 🔥 רצף ${this.bestStreak}
+📊 ציון: ${this.score} נקודות!
 
 ${this.getMotivationalMessage()}
+
+${this.getFriendChallenge()}
 
 בואו תנסו גם! 🚀
 ${window.location.href}
 
-#משחק_כפל #מתמטיקה_מגניבה`;
+#מלכת_הכפל #מתמטיקה_מגניבה #גאונית`;
   }
 
   shareToGeneral() {
