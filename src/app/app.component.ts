@@ -33,6 +33,15 @@ export class AppComponent implements OnInit {
   hintUsed: boolean = false;
   currentHint: string = "";
 
+  // Enhanced game features
+  streak: number = 0;
+  bestStreak: number = 0;
+  totalTimeSpent: number = 0;
+  gameStartTime: number = 0;
+  questionStartTime: number = 0;
+  averageResponseTime: number = 0;
+  perfectAnswers: number = 0; // Answers without hints and with time bonus
+
   // Player and scoring
   playerName: string = "";
   showNameInput: boolean = false;
@@ -63,6 +72,14 @@ export class AppComponent implements OnInit {
     this.showNameInput = false;
     this.showLeaderboard = false;
     this.playerName = "";
+
+    // Reset enhanced features
+    this.streak = 0;
+    this.bestStreak = 0;
+    this.totalTimeSpent = 0;
+    this.gameStartTime = Date.now();
+    this.perfectAnswers = 0;
+
     this.askNewQuestion();
   }
 
@@ -234,145 +251,130 @@ export class AppComponent implements OnInit {
   }
 
   getHintForNumbers({ num1, num2 }: { num1: number; num2: number }): string {
-    // Super fun and trendy hints for cool kids! 😎
+    // AI-Generated Super Fun & Memorable Hints for 10-year-old Girls! 🌟
 
-    // Same numbers (squares)
+    const answer = num1 * num2;
+
+    // Same numbers (squares) - Make it magical!
     if (num1 === num2) {
-      const stories = [
-        `🎯 וואו! זה ${num1} בריבוע! כמו ${num1} חבר'ות עם ${num1} סטיקרים כל אחת! 💫`,
-        `🏠 תדמייני ${num1} בתים מגניבים, ובכל בית ${num1} חדרים צבעוניים! כמה חדרים יש בכל השכונה? 🌈`,
-        `🍎 יש לך ${num1} תיקים, ובכל תיק ${num1} חטיפים טעימים! כמה חטיפים בסך הכל? 🎒`,
+      const magicalStories = [
+        `✨ קסם של ${num1}! תדמייני ${num1} נסיכות, כל אחת עם ${num1} יהלומים נוצצים! סך הכל: ${answer} יהלומים מקסימים! 💎👑`,
+        `🦄 ${num1} חד-קרנים קסומים, כל אחד עם ${num1} כוכבים על הקרן! זה ${answer} כוכבים שמאירים את השמיים! ⭐`,
+        `🌸 ${num1} פרחים יפהפיים, כל פרח עם ${num1} עלי כותרת צבעוניים! זה ${answer} עלים מדהימים! 🌺`,
       ];
-      return (
-        stories[Math.floor(Math.random() * stories.length)] +
-        ` הפתרון הוא: ${num1 * num1} - קלי קלות! 🎉`
-      );
+      return magicalStories[Math.floor(Math.random() * magicalStories.length)];
     }
 
-    // Multiplication by 1
+    // Multiplication by 1 - You're already perfect!
     if (num1 === 1 || num2 === 1) {
-      return `🌟 איזה כיף! כפל ב-1 זה הכי קל בעולם! כל מספר כפול 1 נשאר בדיוק אותו דבר. זה כמו לקחת ${
-        num1 === 1 ? num2 : num1
-      } דברים פעם אחת! 🎈`;
+      const other = num1 === 1 ? num2 : num1;
+      return `🌟 את כבר מושלמת! כפל ב-1 זה כמו להיות עצמך - ${other} נשאר ${other}! זה הכי קל בעולם! 💖`;
     }
 
-    // Multiplication by 2 (doubling)
+    // Multiplication by 2 - Best friends forever!
     if (num1 === 2 || num2 === 2) {
       const other = num1 === 2 ? num2 : num1;
-      return `👯‍♀️ זה כפל! כמו תאומות! ${other} + ${other} = ${
-        other * 2
-      }. תחשבי על ${other} זוגות של חברות טובות! 💕`;
+      return `👭 חברות לנצח! ${other} + ${other} = ${answer}! תחשבי על ${other} זוגות של חברות טובות שרוקדות יחד! 💃✨`;
     }
 
-    // Multiplication by 3
+    // Multiplication by 3 - Triangle magic!
     if (num1 === 3 || num2 === 3) {
       const other = num1 === 3 ? num2 : num1;
-      return `🔺 שלישיות מגניבות! ${other} + ${other} + ${other} = ${
-        other * 3
-      }. כמו 3 קבוצות של ${other} חברים שמשחקים יחד! 🎮`;
+      return `🔺 קסם המשולש! ${other} קבוצות של 3 חברות שעושות פירמידה אנושית! ${other} + ${other} + ${other} = ${answer}! 🤸‍♀️`;
     }
 
-    // Multiplication by 4
+    // Multiplication by 4 - Four-leaf clover luck!
     if (num1 === 4 || num2 === 4) {
       const other = num1 === 4 ? num2 : num1;
-      return `🚗 רביעיות כמו גלגלים! תחשבי על ${other} מכוניות מהירות, לכל אחת 4 גלגלים. כמה גלגלים בסך הכל? ${other} × 4 = ${
-        other * 4
-      } - מהיר כמו ברק! ⚡`;
+      return `🍀 תלתן של מזל! ${other} תלתנים עם 4 עלים כל אחד = ${answer} עלים של מזל! את תמיד תהיי בת מזל! 🌟`;
     }
 
-    // Multiplication by 5 (counting by 5s)
+    // Multiplication by 5 - High five power!
     if (num1 === 5 || num2 === 5) {
       const other = num1 === 5 ? num2 : num1;
-      const sequence = Array.from(
-        { length: other },
-        (_, i) => (i + 1) * 5
-      ).join(", ");
-      return `✋ היי-פייב! ספרי עם האצבעות! כל יד = 5 אצבעות. ${other} ידיים = ${sequence} = ${
-        other * 5
-      } - זה מדליק! 🔥`;
+      return `✋ כוח ההיי-פייב! ${other} ידיים עם 5 אצבעות = ${answer} אצבעות שמחות! ספרי על האצבעות! 🙌`;
     }
 
-    // Multiplication by 6
+    // Multiplication by 6 - Flower petals!
     if (num1 === 6 || num2 === 6) {
       const other = num1 === 6 ? num2 : num1;
-      return `🥚 חשבי על קרטוני ביצים מהסופר! כל קרטון = 6 ביצים. ${other} קרטונים = ${
-        other * 6
-      } ביצים! זה הולך להיות עוגה ענקית! 🎂`;
+      return `🌻 פרחי שמש מקסימים! ${other} פרחים עם 6 עלי כותרת כל אחד = ${answer} עלים יפהפיים! 🌺`;
     }
 
-    // Multiplication by 7
+    // Multiplication by 7 - Rainbow magic!
     if (num1 === 7 || num2 === 7) {
       const other = num1 === 7 ? num2 : num1;
-      return `🌈 7 צבעי הקשת הקסומה! תדמייני ${other} קשתות יפהפיות, כל אחת עם 7 צבעים. סך הכל: ${
-        other * 7
-      } צבעים מדהימים! ✨`;
+      return `🌈 קשת בענן קסומה! ${other} קשתות עם 7 צבעים כל אחת = ${answer} צבעים מדהימים שמאירים את העולם! ✨`;
     }
 
-    // Multiplication by 8
+    // Multiplication by 8 - Octopus dance!
     if (num1 === 8 || num2 === 8) {
       const other = num1 === 8 ? num2 : num1;
-      return `🕷️ עכבישים חמודים! לכל עכביש יש 8 רגליים. אם יש ${other} עכבישים, כמה רגליים בסך הכל? ${
-        other * 8
-      } רגליים! זה הרבה ריקודים! 💃`;
+      return `🐙 תמנון רקדן! ${other} תמנונים חמודים עם 8 זרועות כל אחד = ${answer} זרועות שרוקדות! איזה מופע! 💃`;
     }
 
-    // Multiplication by 9 (finger trick)
+    // Multiplication by 9 - Magic trick!
     if (num1 === 9 || num2 === 9) {
       const other = num1 === 9 ? num2 : num1;
-      return `🤚 הטריק הכי מגניב של 9! ${other} × 9: תחשבי ${other} × 10 = ${
+      return `🎩 הטריק הקסום של 9! ${other} × 10 = ${
         other * 10
-      }, ואז תחסרי ${other}. ${other * 10} - ${other} = ${
-        other * 9
-      } - את גאונית! 🧠`;
+      }, עכשיו תחסרי ${other}: ${
+        other * 10
+      } - ${other} = ${answer}! את קוסמת אמיתית! ✨`;
     }
 
-    // Multiplication by 10
+    // Multiplication by 10 - Super easy!
     if (num1 === 10 || num2 === 10) {
       const other = num1 === 10 ? num2 : num1;
-      return `🔟 וואו! זה הכי קל! כפל ב-10 = פשוט תוסיפי אפס! ${other} × 10 = ${other}0 - את מלכת המתמטיקה! 👑`;
+      return `🔟 סופר קל! כפל ב-10 = תוסיפי אפס! ${other} הופך ל-${answer}! את מלכת המתמטיקה! 👑💖`;
     }
 
-    // Multiplication by 11 (for single digits)
+    // Multiplication by 11 - Mirror magic!
     if (num1 === 11 || num2 === 11) {
       const other = num1 === 11 ? num2 : num1;
       if (other <= 9) {
-        return `🪞 הטריק הקסום של 11! ${other} × 11 = ${other}${other} (פשוט תכתבי את הספרה פעמיים!) - זה כמו קסם! 🎩✨`;
+        return `🪞 קסם המראה! ${other} × 11 = ${other}${other} (הספרה מסתכלת על עצמה במראה!) = ${answer}! 🎭✨`;
       }
     }
 
-    // Multiplication by 12
+    // Multiplication by 12 - Clock magic!
     if (num1 === 12 || num2 === 12) {
       const other = num1 === 12 ? num2 : num1;
-      return `🕐 12 כמו השעון! ${other} × 12 = ${other} × 10 + ${other} × 2 = ${
+      return `🕐 קסם השעון! ${other} × 12 = ${other} × 10 + ${other} × 2 = ${
         other * 10
-      } + ${other * 2} = ${other * 12} - זמן לחגוג! 🎉`;
+      } + ${other * 2} = ${answer}! זמן לחגוג! 🎉`;
     }
 
-    // For larger combinations, use decomposition
+    // For larger combinations - Story method
     if (num1 > 6 && num2 > 6) {
-      // Break down to smaller, known facts
-      const smaller1 = Math.floor(num1 / 2);
-      const smaller2 = Math.floor(num2 / 2);
-      return `🧩 בואי נפרק את זה כמו פאזל! נסי לחשב ${smaller1} × ${smaller2} = ${
-        smaller1 * smaller2
-      }, ואז תכפילי פי 4! זה יהיה מדליק! 🔥`;
+      return `📚 סיפור מתמטי! תחלקי את ${Math.max(
+        num1,
+        num2
+      )} לחלקים קטנים יותר. למשל: ${Math.min(num1, num2)} × 5 + ${Math.min(
+        num1,
+        num2
+      )} × ${Math.max(num1, num2) - 5} = ${answer}! 🌟`;
     }
 
-    // General decomposition hint
+    // General decomposition - Building blocks
     if (num1 > 5 || num2 > 5) {
       const smaller = Math.min(num1, num2);
       const larger = Math.max(num1, num2);
-      if (larger > 5) {
-        return `💡 בואי נפרק את ${larger} כמו פרו! נסי ${smaller} × 5 + ${smaller} × ${
-          larger - 5
-        } = ${smaller * 5} + ${smaller * (larger - 5)} = ${
-          num1 * num2
-        } - את גאונית! 🌟`;
-      }
+      return `🧱 בואי נבנה! ${smaller} × 5 = ${
+        smaller * 5
+      }, ועוד ${smaller} × ${larger - 5} = ${smaller * (larger - 5)}. ביחד: ${
+        smaller * 5
+      } + ${smaller * (larger - 5)} = ${answer}! 🏗️`;
     }
 
-    // Default encouraging hint
-    return `🌟 את יכולה לעשות את זה! נסי לחשב ${num1} + ${num1} + ${num1}... או תחשבי על דברים שאת הכי אוהבת בקבוצות של ${num1}! את הכי מגניבה! 😎💪`;
+    // Default encouraging hint with visualization
+    const visualHints = [
+      `🌟 תדמייני ${num1} קבוצות של ${num2} חברות שמשחקות יחד! כמה חברות בסך הכל? ${answer}! 👭`,
+      `🎨 ${num1} צבעים, כל צבע עם ${num2} גוונים! זה ${answer} גוונים מדהימים לציור! 🖌️`,
+      `🍭 ${num1} שקיות ממתקים, בכל שקית ${num2} סוכריות! זה ${answer} סוכריות מתוקות! 🍬`,
+      `⭐ ${num1} כוכבים, כל כוכב עם ${num2} קרניים! זה ${answer} קרני אור מנצנצות! ✨`,
+    ];
+    return visualHints[Math.floor(Math.random() * visualHints.length)];
   }
 
   // Score persistence methods using Cloud Storage
