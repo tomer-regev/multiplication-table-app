@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
   feedbackMessage: string = "";
   isAnswering: boolean = false;
   showConfetti: boolean = false;
+  showHallOfFameOverlay: boolean = false;
 
   ngOnInit(): void {
     this.loadTopScores();
@@ -420,5 +421,25 @@ export class AppComponent implements OnInit {
 
   onPlayerNameSubmit() {
     this.saveScore();
+  }
+
+  // Hall of Fame methods
+  async showHallOfFame() {
+    // Pause the timer while viewing Hall of Fame
+    clearInterval(this.timer);
+
+    // Refresh the scores to get the latest data
+    await this.loadTopScores();
+
+    this.showHallOfFameOverlay = true;
+  }
+
+  hideHallOfFame() {
+    this.showHallOfFameOverlay = false;
+
+    // Resume the timer if game is still active
+    if (!this.isGameOver && !this.isAnswering) {
+      this.startTimer();
+    }
   }
 }

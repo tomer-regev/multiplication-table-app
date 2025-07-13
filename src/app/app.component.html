@@ -37,9 +37,10 @@
         <span>💡 רמזים נותרים: {{ hintsLeft }}</span>
       </div>
       
-      <!-- New Game button during gameplay -->
+      <!-- New Game and Hall of Fame buttons during gameplay -->
       <div class="new-game-section">
         <button (click)="newGame()" class="new-game-button">🔄 משחק חדש</button>
+        <button (click)="showHallOfFame()" class="hall-of-fame-button">🏆 היכל התהילה</button>
       </div>
     </div>
     
@@ -97,6 +98,27 @@
         <span *ngIf="feedbackType === 'wrong'">❌</span>
       </div>
       <div class="feedback-message">{{ feedbackMessage }}</div>
+    </div>
+  </div>
+
+  <!-- Hall of Fame Overlay (during gameplay) -->
+  <div *ngIf="showHallOfFameOverlay" class="hall-of-fame-overlay">
+    <div class="hall-of-fame-content">
+      <h3>🏆 היכל התהילה - הכוכבות הכי מגניבות!</h3>
+      <div class="leaderboard" *ngIf="topScores.length > 0">
+        <div class="score-entry" *ngFor="let entry of topScores; let i = index">
+          <div class="rank">{{ i + 1 }}</div>
+          <div class="player-info">
+            <div class="name">{{ entry.name }}</div>
+            <div class="details">{{ entry.correctAnswers }}/{{ entry.totalQuestions }} • {{ entry.date }}</div>
+          </div>
+          <div class="score">{{ entry.score }}</div>
+        </div>
+      </div>
+      <div *ngIf="topScores.length === 0" class="no-scores">
+        עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
+      </div>
+      <button (click)="hideHallOfFame()" class="close-hall-button">❌ סגרי</button>
     </div>
   </div>
 
