@@ -134,11 +134,16 @@
   <div *ngIf="showFeedback" class="feedback-overlay" 
        [ngClass]="{'correct-feedback': feedbackType === 'correct', 'wrong-feedback': feedbackType === 'wrong'}">
     <div class="feedback-content">
+      <button (click)="closeFeedback()" class="feedback-close">✕</button>
       <div class="feedback-icon">
         <span *ngIf="feedbackType === 'correct'">🎉</span>
         <span *ngIf="feedbackType === 'wrong'">❌</span>
       </div>
       <div class="feedback-message">{{ feedbackMessage }}</div>
+      <button (click)="closeFeedback()" class="feedback-continue">
+        <span *ngIf="feedbackType === 'correct'">🚀 בואי נמשיך!</span>
+        <span *ngIf="feedbackType === 'wrong'">💪 הבנתי, בואי נמשיך!</span>
+      </button>
     </div>
   </div>
 

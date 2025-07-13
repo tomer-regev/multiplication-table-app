@@ -238,11 +238,14 @@ export class AppComponent implements OnInit {
 
     this.userAnswer = undefined; // Reset user answer
 
-    // Wait longer for wrong answers and hints so users can read them
-    const waitTime = this.feedbackType === "wrong" ? 7500 : 1500;
+    // Auto-close after shorter time, but allow manual close
+    const waitTime = this.feedbackType === "wrong" ? 4000 : 1200;
     setTimeout(() => {
-      this.hideFeedback();
-      this.askNewQuestion();
+      if (this.showFeedback) {
+        // Only auto-close if not manually closed
+        this.hideFeedback();
+        this.askNewQuestion();
+      }
     }, waitTime);
   }
 
@@ -262,6 +265,11 @@ export class AppComponent implements OnInit {
     this.feedbackType = null;
     this.feedbackMessage = "";
     this.isAnswering = false;
+  }
+
+  closeFeedback() {
+    this.hideFeedback();
+    this.askNewQuestion();
   }
 
   endGame() {
@@ -687,9 +695,14 @@ export class AppComponent implements OnInit {
     }
   }
 
-  shareWithFriends() {
-    // Show the enhanced graphic share overlay
-    this.showShareOverlay = true;
+  async shareWithFriends() {
+    // Try direct WhatsApp sharing first, fallback to overlay if needed
+    try {
+      await this.shareToWhatsApp();
+    } catch (error) {
+      console.log("Direct sharing failed, showing overlay:", error);
+      this.showShareOverlay = true;
+    }
   }
 
   getShareEmoji(): string {
@@ -875,6 +888,7 @@ export class AppComponent implements OnInit {
     try {
       // First try to generate and share the image
       await this.shareImageToWhatsApp();
+      this.closeShareOverlay(); // Close overlay after successful share
     } catch (error) {
       console.log("Image sharing failed, falling back to text:", error);
       // Fallback to text sharing
@@ -883,6 +897,7 @@ export class AppComponent implements OnInit {
         shareText
       )}`;
       window.open(whatsappUrl, "_blank");
+      this.closeShareOverlay(); // Close overlay after opening WhatsApp
     }
   }
 
@@ -1003,6 +1018,7 @@ ${window.location.href}
         text: shareText,
         url: window.location.href,
       });
+      this.closeShareOverlay(); // Close overlay after sharing
     } else {
       this.copyShareText();
     }
@@ -1012,6 +1028,7 @@ ${window.location.href}
     const shareText = this.generateGraphicShareText();
     navigator.clipboard.writeText(shareText).then(() => {
       alert("הטקסט הועתק! 📋");
+      this.closeShareOverlay(); // Close overlay after copying
     });
   }
 

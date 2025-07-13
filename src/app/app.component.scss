@@ -1251,6 +1251,53 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
   animation: bounceIn 0.6s ease-out;
+  position: relative;
+  max-width: 90vw;
+  margin: 0 20px;
+
+  .feedback-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    color: #666;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+  }
+
+  .feedback-continue {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #ff6b9d, #c44569);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+    font-weight: bold;
+
+    &:hover {
+      background: linear-gradient(135deg, #ff5582, #b83d5a);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 157, 0.6);
+    }
+  }
 }
 
 .feedback-icon {
@@ -2735,22 +2782,26 @@
 // Mobile responsive for Share Overlay
 @media (max-width: 768px) {
   .share-overlay {
-    padding: 10px;
+    padding: 15px;
+    align-items: flex-start;
+    padding-top: 20px;
 
     .share-content {
       padding: 20px;
       max-width: 100%;
       margin: 0;
+      max-height: calc(100vh - 40px);
+      border-radius: 20px;
 
       .share-header {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
 
         .share-title {
-          font-size: 1.5em;
+          font-size: 1.4em;
         }
 
         .share-subtitle {
-          font-size: 1em;
+          font-size: 0.95em;
         }
       }
 
@@ -2866,96 +2917,103 @@
 .shareable-card {
   background: linear-gradient(135deg, #fff8dc, #ffefd5, #fff0f8);
   border: 3px solid #ff69b4;
-  border-radius: 15px;
-  padding: 8px;
-  width: 90vw; // Use most of screen width
-  max-width: 400px; // Smaller max width for better fit
-  min-width: 280px; // Minimum for small screens
-  margin: 5px auto;
-  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 380px;
+  min-width: 320px;
+  margin: 10px auto;
+  box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
   position: relative;
   text-align: center;
   font-family: "Heebo", "Rubik", "Segoe UI", "Comic Sans MS", cursive, Arial,
     sans-serif;
   direction: rtl;
   unicode-bidi: embed;
-  height: auto; // Auto height for content
-  max-height: 75vh; // Maximum height to fit in viewport
+  aspect-ratio: 4/5; // Better aspect ratio for mobile sharing
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  overflow: hidden; // Prevent any overflow
+  justify-content: space-between;
+  overflow: hidden;
+  box-sizing: border-box;
 
   .shareable-header {
-    margin-bottom: 8px;
+    flex-shrink: 0;
+    margin-bottom: 15px;
 
     .app-title {
-      font-size: 1.1em;
+      font-size: 1.4em;
       font-weight: bold;
       color: #d63384;
-      text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.6);
-      margin-bottom: 4px;
+      text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.6);
+      margin-bottom: 8px;
+      line-height: 1.2;
     }
 
     .player-name {
-      font-size: 0.9em;
+      font-size: 1.1em;
       color: #8b4a8b;
       font-weight: bold;
       background: linear-gradient(135deg, #fff, #ffeef8);
-      padding: 3px 10px;
-      border-radius: 10px;
+      padding: 8px 16px;
+      border-radius: 15px;
       border: 2px solid #ff69b4;
       display: inline-block;
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
     }
   }
 
   .avatar-section {
-    margin: 8px 0;
+    flex-shrink: 0;
+    margin: 15px 0;
 
     .avatar-container {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      gap: 12px;
 
       .avatar-background {
         position: relative;
-        width: 50px;
-        height: 50px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border: 3px solid;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        animation: avatarFloat 3s ease-in-out infinite;
 
         .avatar-character {
-          font-size: 1.8em;
+          font-size: 2.5em;
         }
 
         .avatar-crown {
           position: absolute;
-          top: -5px;
-          font-size: 1em;
+          top: -8px;
+          font-size: 1.5em;
+          animation: crownShine 1.5s ease-in-out infinite;
         }
 
         .avatar-sparkles {
           position: absolute;
-          top: 5px;
-          right: 5px;
-          font-size: 0.8em;
+          top: 8px;
+          right: 8px;
+          font-size: 1.2em;
+          animation: sparkle 1s ease-in-out infinite;
         }
       }
 
       .avatar-level {
-        font-size: 0.8em;
+        font-size: 1em;
         font-weight: bold;
         color: #d63384;
         background: linear-gradient(135deg, #fff, #ffeef8);
-        padding: 3px 8px;
-        border-radius: 10px;
-        border: 1px solid #ff69b4;
-        box-shadow: 0 2px 4px rgba(255, 105, 180, 0.3);
+        padding: 6px 12px;
+        border-radius: 15px;
+        border: 2px solid #ff69b4;
+        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
       }
     }
   }
@@ -2963,53 +3021,63 @@
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-    margin: 8px 0;
+    gap: 12px;
+    margin: 20px 0;
+    flex: 1;
 
     .stat-card {
       background: linear-gradient(135deg, #fff, #ffeef8);
       border: 2px solid;
-      border-radius: 10px;
-      padding: 8px;
+      border-radius: 15px;
+      padding: 12px;
       text-align: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
 
       .stat-icon {
-        font-size: 1.2em;
-        margin-bottom: 2px;
+        font-size: 1.8em;
+        margin-bottom: 6px;
+        animation: iconPulse 2s ease-in-out infinite;
       }
 
       .stat-value {
-        font-size: 1.1em;
+        font-size: 1.6em;
         font-weight: bold;
         color: #d63384;
         text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.6);
-        margin-bottom: 2px;
+        margin-bottom: 4px;
+        line-height: 1;
       }
 
       .stat-label {
-        font-size: 0.6em;
+        font-size: 0.8em;
         color: #8b4a8b;
         font-weight: bold;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
       }
 
       .stat-rank {
-        font-size: 0.5em;
+        font-size: 0.7em;
         color: #ff6347;
         font-weight: bold;
         background: linear-gradient(135deg, #fff, #ffe4e1);
-        padding: 2px 4px;
-        border-radius: 6px;
+        padding: 3px 6px;
+        border-radius: 8px;
         border: 1px solid #ff6347;
+        display: inline-block;
       }
 
       .stat-progress {
         width: 100%;
-        height: 3px;
+        height: 4px;
         background: #e0e0e0;
         border-radius: 2px;
         overflow: hidden;
-        margin-top: 3px;
+        margin-top: 6px;
 
         .progress-bar {
           height: 100%;
@@ -3022,15 +3090,16 @@
       .streak-flames {
         display: flex;
         justify-content: center;
-        gap: 1px;
-        margin-top: 2px;
-        font-size: 0.5em;
+        gap: 2px;
+        margin-top: 4px;
+        font-size: 0.7em;
+        animation: flameFlicker 0.5s ease-in-out infinite alternate;
       }
 
       .accuracy-circle {
-        width: 20px;
-        height: 20px;
-        margin: 2px auto 0;
+        width: 30px;
+        height: 30px;
+        margin: 4px auto 0;
 
         .circular-chart {
           width: 100%;
@@ -3047,6 +3116,7 @@
             stroke: #32cd32;
             stroke-width: 2;
             stroke-linecap: round;
+            animation: progressFill 2s ease-in-out;
           }
         }
       }
@@ -3054,84 +3124,98 @@
   }
 
   .achievement-showcase {
-    margin: 8px 0;
+    flex-shrink: 0;
+    margin: 15px 0;
     background: linear-gradient(135deg, #fff8dc, #ffefd5);
     border: 2px solid #ffd700;
-    border-radius: 10px;
-    padding: 8px;
+    border-radius: 15px;
+    padding: 12px;
 
     .showcase-title {
-      font-size: 0.8em;
+      font-size: 1em;
       font-weight: bold;
       color: #8b4513;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
     }
 
     .badge-container {
       display: flex;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
 
       .achievement-badge {
         background: linear-gradient(135deg, #fff, #ffeef8);
-        border: 1px solid #ff69b4;
-        border-radius: 8px;
-        padding: 4px;
+        border: 2px solid #ff69b4;
+        border-radius: 12px;
+        padding: 8px;
         text-align: center;
-        min-width: 40px;
+        min-width: 50px;
+        transition: all 0.3s ease;
+        animation: badgeGlow 3s ease-in-out infinite;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
+        }
 
         .badge-icon {
-          font-size: 1em;
-          margin-bottom: 2px;
+          font-size: 1.4em;
+          margin-bottom: 4px;
+          animation: badgeRotate 4s linear infinite;
         }
 
         .badge-name {
-          font-size: 0.5em;
+          font-size: 0.7em;
           font-weight: bold;
           color: #8b4a8b;
+          line-height: 1.2;
         }
       }
     }
   }
 
   .motivation-section {
-    margin: 8px 0;
+    flex-shrink: 0;
+    margin: 15px 0;
     background: linear-gradient(135deg, #e8f5e8, #f0fff0);
     border: 2px solid #32cd32;
-    border-radius: 10px;
-    padding: 8px;
+    border-radius: 15px;
+    padding: 12px;
 
     .motivation-text {
-      font-size: 0.8em;
+      font-size: 1em;
       font-weight: bold;
       color: #228b22;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      line-height: 1.3;
     }
 
     .challenge-text {
-      font-size: 0.7em;
+      font-size: 0.9em;
       color: #2e8b57;
       font-weight: bold;
+      line-height: 1.3;
     }
   }
 
   .shareable-footer {
-    margin-top: 8px;
-    padding-top: 6px;
-    border-top: 1px dashed #ff69b4;
+    flex-shrink: 0;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px dashed #ff69b4;
 
     .app-url {
-      font-size: 0.7em;
+      font-size: 0.9em;
       font-weight: bold;
       color: #8b4a8b;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .hashtags {
-      font-size: 0.6em;
+      font-size: 0.8em;
       color: #ff6347;
       font-weight: bold;
     }
@@ -3140,27 +3224,200 @@
   .shareable-decorations {
     .corner-decoration {
       position: absolute;
-      font-size: 1.2em;
+      font-size: 1.5em;
       opacity: 0.8;
+      animation: sparkle 2s ease-in-out infinite;
 
       &.top-left {
-        top: 10px;
-        left: 10px;
+        top: 15px;
+        left: 15px;
       }
 
       &.top-right {
-        top: 10px;
-        right: 10px;
+        top: 15px;
+        right: 15px;
       }
 
       &.bottom-left {
-        bottom: 10px;
-        left: 10px;
+        bottom: 15px;
+        left: 15px;
       }
 
       &.bottom-right {
-        bottom: 10px;
-        right: 10px;
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+  }
+}
+
+// Mobile responsive adjustments for shareable card
+@media (max-width: 480px) {
+  // Ensure shareable card is properly sized in mobile share overlay
+  .shareable-card {
+    max-width: 320px;
+    min-width: 280px;
+    padding: 15px;
+    aspect-ratio: 3/4; // Slightly taller for mobile
+    margin: 15px auto;
+
+    .shareable-header {
+      margin-bottom: 12px;
+
+      .app-title {
+        font-size: 1.2em;
+        margin-bottom: 6px;
+      }
+
+      .player-name {
+        font-size: 1em;
+        padding: 6px 12px;
+      }
+    }
+
+    .avatar-section {
+      margin: 12px 0;
+
+      .avatar-container {
+        gap: 8px;
+
+        .avatar-background {
+          width: 60px;
+          height: 60px;
+
+          .avatar-character {
+            font-size: 2em;
+          }
+
+          .avatar-crown {
+            font-size: 1.2em;
+          }
+
+          .avatar-sparkles {
+            font-size: 1em;
+          }
+        }
+
+        .avatar-level {
+          font-size: 0.9em;
+          padding: 4px 8px;
+        }
+      }
+    }
+
+    .stats-grid {
+      gap: 8px;
+      margin: 15px 0;
+
+      .stat-card {
+        padding: 8px;
+
+        .stat-icon {
+          font-size: 1.4em;
+          margin-bottom: 4px;
+        }
+
+        .stat-value {
+          font-size: 1.3em;
+          margin-bottom: 3px;
+        }
+
+        .stat-label {
+          font-size: 0.7em;
+          margin-bottom: 4px;
+        }
+
+        .stat-rank {
+          font-size: 0.6em;
+          padding: 2px 4px;
+        }
+
+        .accuracy-circle {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
+
+    .achievement-showcase {
+      margin: 12px 0;
+      padding: 10px;
+
+      .showcase-title {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+      }
+
+      .badge-container {
+        gap: 6px;
+
+        .achievement-badge {
+          padding: 6px;
+          min-width: 40px;
+
+          .badge-icon {
+            font-size: 1.2em;
+            margin-bottom: 3px;
+          }
+
+          .badge-name {
+            font-size: 0.6em;
+          }
+        }
+      }
+    }
+
+    .motivation-section {
+      margin: 12px 0;
+      padding: 10px;
+
+      .motivation-text {
+        font-size: 0.9em;
+        margin-bottom: 4px;
+      }
+
+      .challenge-text {
+        font-size: 0.8em;
+      }
+    }
+
+    .shareable-footer {
+      margin-top: 12px;
+      padding-top: 8px;
+
+      .app-url {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+      }
+
+      .hashtags {
+        font-size: 0.7em;
+      }
+    }
+
+    .shareable-decorations {
+      .corner-decoration {
+        font-size: 1.2em;
+
+        &.top-left,
+        &.top-right {
+          top: 12px;
+        }
+
+        &.bottom-left,
+        &.bottom-right {
+          bottom: 12px;
+        }
+
+        &.top-left,
+        &.bottom-left {
+          left: 12px;
+        }
+
+        &.top-right,
+        &.bottom-right {
+          right: 12px;
+        }
       }
     }
   }
