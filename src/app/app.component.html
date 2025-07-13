@@ -1,0 +1,78 @@
+<div class="app-container">
+  <!-- Confetti Animation -->
+  <div *ngIf="showConfetti" class="confetti-container">
+    <div class="confetti" *ngFor="let i of [].constructor(50); let idx = index" [style.animation-delay.s]="idx * 0.1"></div>
+  </div>
+
+  <div class="game-status">
+    <div *ngIf="!isGameOver">
+      <!-- Top row with question progress -->
+      <div class="question-progress">
+        <span>שאלה {{ correctAnswers + wrongAnswers + 1 }} מתוך {{ totalQuestions }}</span>
+      </div>
+      
+      <!-- Main indicators row -->
+      <div class="main-indicators">
+        <div class="indicator time-indicator">
+          <div class="indicator-icon">⏰</div>
+          <div class="indicator-value">{{ timeLeft }}</div>
+          <div class="indicator-label">שניות</div>
+        </div>
+        
+        <div class="indicator score-indicator">
+          <div class="indicator-icon">⭐</div>
+          <div class="indicator-value">{{ score }}</div>
+          <div class="indicator-label">נקודות</div>
+        </div>
+        
+        <div class="indicator mistakes-indicator">
+          <div class="indicator-icon">❌</div>
+          <div class="indicator-value">{{ maxFailures - wrongAnswers }}</div>
+          <div class="indicator-label">טעויות נותרות</div>
+        </div>
+      </div>
+      
+      <!-- Hints indicator -->
+      <div class="hints-indicator">
+        <span>💡 רמזים נותרים: {{ hintsLeft }}</span>
+      </div>
+    </div>
+    
+    <div *ngIf="isGameOver">
+      <h1>{{ resultMessage }}</h1>
+      <button (click)="startGame()">שחקי שוב</button>
+    </div>
+  </div>
+
+  <!-- Feedback Animation Overlay -->
+  <div *ngIf="showFeedback" class="feedback-overlay" 
+       [ngClass]="{'correct-feedback': feedbackType === 'correct', 'wrong-feedback': feedbackType === 'wrong'}">
+    <div class="feedback-content">
+      <div class="feedback-icon">
+        <span *ngIf="feedbackType === 'correct'">🎉</span>
+        <span *ngIf="feedbackType === 'wrong'">❌</span>
+      </div>
+      <div class="feedback-message">{{ feedbackMessage }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="!isGameOver" class="question" [ngClass]="{'answering': isAnswering}">
+    <h2 dir="ltr">{{ currentQuestion?.question }}</h2>
+    
+    <!-- Hint section -->
+    <div class="hint-section">
+      <button (click)="useHint()" [disabled]="hintsLeft === 0 || hintUsed || isAnswering" class="hint-button">
+        💡 השתמשי ברמז ({{ hintsLeft }} נותרים)
+      </button>
+      <div *ngIf="currentHint" class="hint-display">
+        {{ currentHint }}
+      </div>
+    </div>
+    
+    <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="התשובה שלך" 
+           (keydown.enter)="onSubmitAnswer()"  />
+    <button (click)="onSubmitAnswer()" [disabled]="isAnswering || userAnswer === undefined">
+      {{ isAnswering ? 'מעבדת...' : 'שלחי' }}
+    </button>
+  </div>
+</div>
