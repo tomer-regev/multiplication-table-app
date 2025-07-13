@@ -871,10 +871,125 @@ export class AppComponent implements OnInit {
     return ["✨", "🌟", "💫", "🎉", "💖", "🦄", "🌈", "👑"];
   }
 
-  shareToWhatsApp() {
-    const shareText = this.generateGraphicShareText();
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, "_blank");
+  async shareToWhatsApp() {
+    try {
+      // First try to generate and share the image
+      await this.shareImageToWhatsApp();
+    } catch (error) {
+      console.log("Image sharing failed, falling back to text:", error);
+      // Fallback to text sharing
+      const shareText = this.generateGraphicShareText();
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+        shareText
+      )}`;
+      window.open(whatsappUrl, "_blank");
+    }
+  }
+
+  async shareImageToWhatsApp() {
+    try {
+      // Import html2canvas dynamically
+      const html2canvasModule = await import("html2canvas");
+      const html2canvas = html2canvasModule.default;
+
+      const shareElement = document.querySelector(
+        ".share-content"
+      ) as HTMLElement;
+      if (!shareElement) {
+        throw new Error("Share element not found");
+      }
+
+      // Configure html2canvas options for better quality
+      const canvas = await html2canvas(shareElement, {
+        backgroundColor: "#fff8dc",
+        scale: 2, // Higher resolution
+        useCORS: true,
+        allowTaint: true,
+        width: shareElement.offsetWidth,
+        height: shareElement.offsetHeight,
+        scrollX: 0,
+        scrollY: 0,
+      });
+
+      // Convert canvas to blob
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+          (blob: Blob | null) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("Failed to create blob"));
+            }
+          },
+          "image/png",
+          0.9
+        );
+      });
+
+      // Create a file from the blob
+      const file = new File([blob], "my-multiplication-achievement.png", {
+        type: "image/png",
+      });
+
+      // Try to share using Web Share API with image
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({
+          title: "משחק הכפל הקסום - ההישגים שלי!",
+          text: this.generateShortShareText(),
+          files: [file],
+        });
+      } else {
+        // Fallback: Create a download link and open WhatsApp with text
+        this.downloadImageAndShareText(canvas);
+      }
+    } catch (error) {
+      console.error("Error in shareImageToWhatsApp:", error);
+      throw error;
+    }
+  }
+
+  downloadImageAndShareText(canvas: HTMLCanvasElement) {
+    // Create download link for the image
+    const link = document.createElement("a");
+    link.download = "my-multiplication-achievement.png";
+    link.href = canvas.toDataURL("image/png");
+
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Show instructions and open WhatsApp
+    const shortText = this.generateShortShareText();
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shortText)}`;
+
+    // Show user instructions
+    setTimeout(() => {
+      alert(
+        "התמונה הורדה! עכשיו:\n1. שתפי את התמונה שהורדה\n2. הוסיפי את הטקסט מהודעת WhatsApp\n\nWhatsApp נפתח עכשיו עם הטקסט! 📱✨"
+      );
+      window.open(whatsappUrl, "_blank");
+    }, 500);
+  }
+
+  generateShortShareText(): string {
+    const avatar = this.getAvatarCharacter();
+    const rank = this.getScoreRank();
+
+    return `${avatar} הרגע השגתי ${this.score} נקודות במשחק הכפל הקסום! 
+    
+🏆 רמה ${this.level} | 💎 ${this.gems} יהלומים | 🔥 רצף ${this.bestStreak}
+
+${this.getMotivationalMessage()}
+
+בואו תנסו גם! 🚀
+${window.location.href}
+
+#משחק_כפל #מתמטיקה_מגניבה`;
   }
 
   shareToGeneral() {
