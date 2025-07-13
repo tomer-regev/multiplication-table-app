@@ -892,23 +892,26 @@ export class AppComponent implements OnInit {
       const html2canvasModule = await import("html2canvas");
       const html2canvas = html2canvasModule.default;
 
+      // Target only the clean shareable card, not the entire overlay
       const shareElement = document.querySelector(
-        ".share-content"
+        ".shareable-card"
       ) as HTMLElement;
       if (!shareElement) {
-        throw new Error("Share element not found");
+        throw new Error("Shareable card element not found");
       }
 
-      // Configure html2canvas options for better quality
+      // Configure html2canvas options for mobile-optimized sharing
       const canvas = await html2canvas(shareElement, {
         backgroundColor: "#fff8dc",
-        scale: 2, // Higher resolution
+        scale: 2, // Higher resolution for crisp mobile display
         useCORS: true,
         allowTaint: true,
-        width: shareElement.offsetWidth,
+        width: Math.min(400, window.innerWidth * 0.9), // Responsive width
         height: shareElement.offsetHeight,
         scrollX: 0,
         scrollY: 0,
+        logging: false, // Disable logging for cleaner output
+        removeContainer: true, // Clean up after capture
       });
 
       // Convert canvas to blob
@@ -922,7 +925,7 @@ export class AppComponent implements OnInit {
             }
           },
           "image/png",
-          0.9
+          0.95 // Higher quality for sharing
         );
       });
 

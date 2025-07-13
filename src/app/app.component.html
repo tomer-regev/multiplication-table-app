@@ -114,7 +114,12 @@
         <div *ngIf="topScores.length === 0" class="no-scores">
           עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
         </div>
-        <button (click)="hideLeaderboard()">🎮 בואי נמשיך</button>
+        
+        <!-- Share and Continue buttons -->
+        <div class="leaderboard-actions">
+          <button (click)="shareWithFriends()" class="share-from-leaderboard-button">📱 שתפי עם חברות!</button>
+          <button (click)="hideLeaderboard()" class="continue-button">🎮 בואי נמשיך</button>
+        </div>
       </div>
 
       <!-- Game over buttons (shown when not in name input or leaderboard) -->
@@ -185,76 +190,99 @@
         <div class="share-subtitle">שתפי את ההצלחה שלך עם החברות!</div>
       </div>
 
-      <!-- Dynamic Avatar Section -->
-      <div class="avatar-section">
-        <div class="avatar-container">
-          <div class="avatar-background" [ngClass]="getAvatarTheme()">
-            <div class="avatar-character">{{ getAvatarCharacter() }}</div>
-            <div class="avatar-crown" *ngIf="score >= 80">👑</div>
-            <div class="avatar-sparkles">✨</div>
+      <!-- Clean Shareable Card (this is what gets captured) -->
+      <div class="shareable-card">
+        <!-- App Title -->
+        <div class="shareable-header">
+          <div class="app-title">🎯 משחק הכפל הקסום 🎯</div>
+          <div class="player-name" *ngIf="playerName">{{ playerName }}</div>
+        </div>
+
+        <!-- Dynamic Avatar Section -->
+        <div class="avatar-section">
+          <div class="avatar-container">
+            <div class="avatar-background" [ngClass]="getAvatarTheme()">
+              <div class="avatar-character">{{ getAvatarCharacter() }}</div>
+              <div class="avatar-crown" *ngIf="score >= 80">👑</div>
+              <div class="avatar-sparkles">✨</div>
+            </div>
+            <div class="avatar-level">רמה {{ level }}</div>
           </div>
-          <div class="avatar-level">רמה {{ level }}</div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card score-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">{{ score }}</div>
+            <div class="stat-label">נקודות</div>
+            <div class="stat-rank">{{ getScoreRank() }}</div>
+          </div>
+          
+          <div class="stat-card gems-card">
+            <div class="stat-icon">💎</div>
+            <div class="stat-value">{{ gems }}</div>
+            <div class="stat-label">יהלומים</div>
+            <div class="stat-progress">
+              <div class="progress-bar" [style.width.%]="(gems / 50) * 100"></div>
+            </div>
+          </div>
+          
+          <div class="stat-card streak-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value">{{ bestStreak }}</div>
+            <div class="stat-label">רצף הכי טוב</div>
+            <div class="streak-flames" *ngIf="bestStreak >= 5">
+              <span *ngFor="let flame of [].constructor(Math.min(bestStreak, 10))">🔥</span>
+            </div>
+          </div>
+          
+          <div class="stat-card accuracy-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value">{{ getAccuracyPercentage() }}%</div>
+            <div class="stat-label">דיוק</div>
+            <div class="accuracy-circle">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="circle" [attr.stroke-dasharray]="getAccuracyPercentage() + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="achievement-showcase" *ngIf="getTopAchievements().length > 0">
+          <div class="showcase-title">🏆 ההישגים שלי</div>
+          <div class="badge-container">
+            <div *ngFor="let achievement of getTopAchievements()" class="achievement-badge">
+              <div class="badge-icon">{{ getAchievementIcon(achievement) }}</div>
+              <div class="badge-name">{{ getAchievementShortTitle(achievement) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Motivational Message -->
+        <div class="motivation-section">
+          <div class="motivation-text">{{ getMotivationalMessage() }}</div>
+          <div class="challenge-text">{{ getFriendChallenge() }}</div>
+        </div>
+
+        <!-- App URL Footer -->
+        <div class="shareable-footer">
+          <div class="app-url">🌐 בואו תשחקו גם!</div>
+          <div class="hashtags">#משחק_כפל #מתמטיקה_מגניבה</div>
+        </div>
+
+        <!-- Decorative Elements for shareable card -->
+        <div class="shareable-decorations">
+          <div class="corner-decoration top-left">✨</div>
+          <div class="corner-decoration top-right">🌟</div>
+          <div class="corner-decoration bottom-left">💫</div>
+          <div class="corner-decoration bottom-right">🎉</div>
         </div>
       </div>
 
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card score-card">
-          <div class="stat-icon">⭐</div>
-          <div class="stat-value">{{ score }}</div>
-          <div class="stat-label">נקודות</div>
-          <div class="stat-rank">{{ getScoreRank() }}</div>
-        </div>
-        
-        <div class="stat-card gems-card">
-          <div class="stat-icon">💎</div>
-          <div class="stat-value">{{ gems }}</div>
-          <div class="stat-label">יהלומים</div>
-          <div class="stat-progress">
-            <div class="progress-bar" [style.width.%]="(gems / 50) * 100"></div>
-          </div>
-        </div>
-        
-        <div class="stat-card streak-card">
-          <div class="stat-icon">🔥</div>
-          <div class="stat-value">{{ bestStreak }}</div>
-          <div class="stat-label">רצף הכי טוב</div>
-          <div class="streak-flames" *ngIf="bestStreak >= 5">
-            <span *ngFor="let flame of [].constructor(Math.min(bestStreak, 10))">🔥</span>
-          </div>
-        </div>
-        
-        <div class="stat-card accuracy-card">
-          <div class="stat-icon">🎯</div>
-          <div class="stat-value">{{ getAccuracyPercentage() }}%</div>
-          <div class="stat-label">דיוק</div>
-          <div class="accuracy-circle">
-            <svg viewBox="0 0 36 36" class="circular-chart">
-              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-              <path class="circle" [attr.stroke-dasharray]="getAccuracyPercentage() + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Achievement Badges -->
-      <div class="achievement-showcase" *ngIf="getTopAchievements().length > 0">
-        <div class="showcase-title">🏆 ההישגים שלי</div>
-        <div class="badge-container">
-          <div *ngFor="let achievement of getTopAchievements()" class="achievement-badge">
-            <div class="badge-icon">{{ getAchievementIcon(achievement) }}</div>
-            <div class="badge-name">{{ getAchievementShortTitle(achievement) }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Motivational Message -->
-      <div class="motivation-section">
-        <div class="motivation-text">{{ getMotivationalMessage() }}</div>
-        <div class="challenge-text">{{ getFriendChallenge() }}</div>
-      </div>
-
-      <!-- Share Buttons -->
+      <!-- Share Buttons (outside shareable card) -->
       <div class="share-buttons">
         <button (click)="shareToWhatsApp()" class="share-btn whatsapp-btn">
           <div class="btn-icon">💬</div>
@@ -273,7 +301,7 @@
         </button>
       </div>
 
-      <!-- Decorative Elements -->
+      <!-- Decorative Elements for overlay background -->
       <div class="share-decorations">
         <div class="floating-emoji" *ngFor="let emoji of getFloatingEmojis(); let i = index" 
              [style.animation-delay.s]="i * 0.5">{{ emoji }}</div>
