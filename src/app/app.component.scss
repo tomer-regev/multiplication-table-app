@@ -1,17 +1,22 @@
 .app-container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   font-family: "Heebo", "Rubik", "Segoe UI", "Comic Sans MS", cursive, Arial,
     sans-serif;
   position: relative;
-  min-height: 400px;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   background: linear-gradient(135deg, #ffeef8, #f8e8ff, #fff0f8);
-  border-radius: 25px;
-  box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
   direction: rtl;
   unicode-bidi: embed;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 
   // Enhanced font rendering for mobile
   -webkit-font-smoothing: antialiased;
@@ -710,24 +715,47 @@
     font-weight: bold;
   }
 
+  // Mobile-friendly answer input section
+  .answer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 25px 0;
+
+    @media (min-width: 481px) {
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+    }
+  }
+
   input {
-    padding: 15px;
-    font-size: 20px;
-    border: 3px solid #ff69b4;
-    border-radius: 20px;
-    margin-left: 10px;
-    width: 180px;
+    padding: 20px;
+    font-size: 24px;
+    border: 4px solid #ff69b4;
+    border-radius: 25px;
+    width: 200px;
+    max-width: 80%;
     transition: all 0.3s ease;
     background: linear-gradient(135deg, #fff, #ffeef8);
     text-align: center;
     font-weight: bold;
     color: #8b4a8b;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+
+    // Enhanced mobile touch target
+    min-height: 60px;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 
     &:focus {
       border-color: #ff1493;
-      box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.6);
       outline: none;
       transform: scale(1.05);
+      background: linear-gradient(135deg, #fff, #ffe4f0);
     }
 
     &:disabled {
@@ -739,25 +767,39 @@
       color: #d63384;
       font-style: italic;
     }
+
+    // Remove number input spinners
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 
   button {
-    padding: 15px 30px;
-    font-size: 18px;
+    padding: 20px 40px;
+    font-size: 20px;
     background: linear-gradient(135deg, #ff6b9d, #c44569);
     color: white;
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-left: 15px;
-    box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+    box-shadow: 0 6px 18px rgba(255, 107, 157, 0.4);
     font-weight: bold;
+    min-width: 150px;
+    min-height: 60px;
+    touch-action: manipulation;
 
     &:hover:not(:disabled) {
       background: linear-gradient(135deg, #ff5582, #b83d5a);
       transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.6);
+      box-shadow: 0 10px 25px rgba(255, 107, 157, 0.6);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 157, 0.6);
     }
 
     &:disabled {
@@ -1380,16 +1422,18 @@
   }
 
   .app-container {
-    padding: 8px;
+    padding: 5px;
     margin: 0;
     max-width: 100vw;
     min-height: 100vh;
-    height: auto;
+    max-height: 100vh;
+    height: 100vh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    border-radius: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
   }
 
   .game-status {
@@ -1567,55 +1611,73 @@
   }
 
   .question {
-    padding: 15px;
-    margin: 12px 0;
+    padding: 12px;
+    margin: 8px 0;
     border-radius: 18px;
     flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(135deg, #ffd1dc, #ffb3d9, #ffd1dc);
+    z-index: 100;
 
     h2 {
-      font-size: 2.2em;
-      margin-bottom: 15px;
+      font-size: 1.8em;
+      margin-bottom: 10px;
       font-weight: bold;
     }
 
     .hint-section {
-      margin: 15px 0;
+      margin: 10px 0;
 
       .hint-button {
-        padding: 10px 16px;
-        font-size: 14px;
-        margin-bottom: 10px;
-        border-radius: 15px;
+        padding: 8px 12px;
+        font-size: 12px;
+        margin-bottom: 8px;
+        border-radius: 12px;
         font-weight: bold;
       }
 
       .hint-display {
-        padding: 12px;
-        font-size: 13px;
-        line-height: 1.4;
+        padding: 10px;
+        font-size: 12px;
+        line-height: 1.3;
         max-width: 100%;
-        border-radius: 12px;
+        border-radius: 10px;
         font-weight: bold;
+        max-height: 80px;
+        overflow-y: auto;
       }
     }
 
+    .answer-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
     input {
-      width: 120px;
-      padding: 12px;
-      font-size: 18px;
-      margin-left: 4px;
-      margin-bottom: 8px;
+      width: 140px;
+      padding: 15px;
+      font-size: 20px;
       border-radius: 15px;
       font-weight: bold;
+      min-height: 50px;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
+      box-sizing: border-box;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 15px 25px;
       font-size: 16px;
-      margin-left: 4px;
-      margin-top: 8px;
       border-radius: 18px;
       font-weight: bold;
+      min-height: 50px;
+      min-width: 120px;
+      touch-action: manipulation;
     }
   }
 
@@ -2803,23 +2865,26 @@
 // Shareable Card Styles (Mobile-Optimized)
 .shareable-card {
   background: linear-gradient(135deg, #fff8dc, #ffefd5, #fff0f8);
-  border: 4px solid #ff69b4;
-  border-radius: 20px;
-  padding: 20px;
-  width: 400px; // Wider for better mobile proportions
-  max-width: 90vw; // Responsive to screen size
-  margin: 20px auto;
-  box-shadow: 0 15px 40px rgba(255, 105, 180, 0.4);
+  border: 3px solid #ff69b4;
+  border-radius: 15px;
+  padding: 12px;
+  width: 95vw; // Use almost full screen width
+  max-width: 450px; // Slightly smaller max width
+  min-width: 300px; // Minimum for small screens
+  margin: 10px auto;
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
   position: relative;
   text-align: center;
   font-family: "Heebo", "Rubik", "Segoe UI", "Comic Sans MS", cursive, Arial,
     sans-serif;
   direction: rtl;
   unicode-bidi: embed;
-  aspect-ratio: 16/10; // Mobile-friendly aspect ratio
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  height: 60vh; // Fixed height to prevent scrollbars
+  max-height: 400px; // Maximum height limit
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 8px;
+  overflow: hidden; // Prevent any overflow
 
   .shareable-header {
     margin-bottom: 20px;

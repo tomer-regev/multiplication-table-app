@@ -906,7 +906,7 @@ export class AppComponent implements OnInit {
         scale: 2, // Higher resolution for crisp mobile display
         useCORS: true,
         allowTaint: true,
-        width: Math.min(400, window.innerWidth * 0.9), // Responsive width
+        width: Math.min(500, window.innerWidth * 0.9), // Much wider for landscape
         height: shareElement.offsetHeight,
         scrollX: 0,
         scrollY: 0,

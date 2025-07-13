@@ -322,10 +322,13 @@
       </div>
     </div>
     
-    <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="התשובה שלך" 
-           (keydown.enter)="onSubmitAnswer()"  />
-    <button (click)="onSubmitAnswer()" [disabled]="isAnswering || userAnswer === undefined">
-      {{ isAnswering ? 'מעבדת...' : 'שלחי' }}
-    </button>
+    <!-- Mobile-friendly answer section -->
+    <div class="answer-section">
+      <input #userAnswerInput type="number" [(ngModel)]="userAnswer" placeholder="התשובה שלך" 
+             (keydown.enter)="onSubmitAnswer()" inputmode="numeric" />
+      <button (click)="onSubmitAnswer()" [disabled]="isAnswering || userAnswer === undefined">
+        {{ isAnswering ? 'מעבדת...' : 'שלחי' }}
+      </button>
+    </div>
   </div>
 </div>
