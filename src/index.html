@@ -1,13 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiplication Table Game</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>משחק הכפל הקסום</title>
+  
+  <!-- Preload Hebrew fonts for better mobile support -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Mobile-specific meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="משחק הכפל">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- Character encoding fixes for mobile -->
+  <style>
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    
+    body {
+      font-family: 'Heebo', 'Rubik', 'Segoe UI', Tahoma, Arial, sans-serif;
+      direction: rtl;
+      unicode-bidi: embed;
+    }
+    
+    /* Fix for special characters on mobile */
+    .app-container, .app-container * {
+      font-feature-settings: "kern" 1, "liga" 1;
+      -webkit-font-feature-settings: "kern" 1, "liga" 1;
+      -moz-font-feature-settings: "kern" 1, "liga" 1;
+    }
+  </style>
 </head>
 <body>
-  
   <app-root></app-root>
-  
 </body>
 </html>

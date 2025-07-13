@@ -3,13 +3,34 @@
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-  font-family: "Comic Sans MS", cursive, Arial, sans-serif;
+  font-family: "Heebo", "Rubik", "Segoe UI", "Comic Sans MS", cursive, Arial,
+    sans-serif;
   position: relative;
   min-height: 400px;
   background: linear-gradient(135deg, #ffeef8, #f8e8ff, #fff0f8);
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
   direction: rtl;
+  unicode-bidi: embed;
+
+  // Enhanced font rendering for mobile
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-feature-settings: "kern" 1, "liga" 1;
+  -moz-font-feature-settings: "kern" 1, "liga" 1;
+
+  // Fix for special characters on mobile
+  * {
+    font-family: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1;
+    -moz-font-feature-settings: "kern" 1, "liga" 1;
+  }
 }
 
 .game-status {
