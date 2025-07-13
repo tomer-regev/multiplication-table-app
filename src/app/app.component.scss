@@ -1994,6 +1994,755 @@
   }
 }
 
+// Enhanced Share Overlay Styles
+.share-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 193, 0.95),
+    rgba(255, 192, 203, 0.95)
+  );
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+  animation: fadeInScale 0.4s ease-out;
+  overflow-y: auto;
+  padding: 20px;
+
+  .share-content {
+    background: linear-gradient(135deg, #fff8dc, #ffefd5, #fff0f8);
+    border: 4px solid #ff69b4;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(255, 105, 180, 0.4);
+    animation: bounceIn 0.6s ease-out;
+    position: relative;
+    text-align: center;
+
+    .share-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+
+      &:hover {
+        background: linear-gradient(135deg, #ff5582, #b83d5a);
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(255, 107, 157, 0.6);
+      }
+    }
+
+    .share-header {
+      margin-bottom: 25px;
+
+      .share-title {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #d63384;
+        text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.6);
+        margin-bottom: 10px;
+        animation: pulse 2s infinite;
+      }
+
+      .share-subtitle {
+        font-size: 1.1em;
+        color: #8b4a8b;
+        font-weight: bold;
+      }
+    }
+
+    .avatar-section {
+      margin: 25px 0;
+
+      .avatar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+
+        .avatar-background {
+          position: relative;
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 4px solid;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          animation: avatarFloat 3s ease-in-out infinite;
+
+          &.avatar-common {
+            background: linear-gradient(135deg, #ffd1dc, #ffb3d9);
+            border-color: #ff69b4;
+          }
+
+          &.avatar-uncommon {
+            background: linear-gradient(135deg, #e6f3ff, #cce7ff);
+            border-color: #4ecdc4;
+          }
+
+          &.avatar-rare {
+            background: linear-gradient(135deg, #f0e6ff, #e6ccff);
+            border-color: #9370db;
+          }
+
+          &.avatar-epic {
+            background: linear-gradient(135deg, #fff8dc, #ffd700);
+            border-color: #ffd700;
+          }
+
+          &.avatar-legendary {
+            background: linear-gradient(135deg, #ffe4e1, #ff69b4, #ffd700);
+            border-color: #ff1493;
+            animation: avatarLegendary 2s ease-in-out infinite;
+          }
+
+          .avatar-character {
+            font-size: 4em;
+            animation: characterBounce 2s ease-in-out infinite;
+          }
+
+          .avatar-crown {
+            position: absolute;
+            top: -10px;
+            font-size: 2em;
+            animation: crownShine 1.5s ease-in-out infinite;
+          }
+
+          .avatar-sparkles {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            animation: sparkle 1s ease-in-out infinite;
+          }
+        }
+
+        .avatar-level {
+          font-size: 1.3em;
+          font-weight: bold;
+          color: #d63384;
+          background: linear-gradient(135deg, #fff, #ffeef8);
+          padding: 8px 20px;
+          border-radius: 20px;
+          border: 2px solid #ff69b4;
+          box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+        }
+      }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 25px 0;
+
+      .stat-card {
+        background: linear-gradient(135deg, #fff, #ffeef8);
+        border: 3px solid;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        &.score-card {
+          border-color: #ffd700;
+          background: linear-gradient(135deg, #fff8dc, #ffefd5);
+        }
+
+        &.gems-card {
+          border-color: #00ced1;
+          background: linear-gradient(135deg, #f0ffff, #e0ffff);
+        }
+
+        &.streak-card {
+          border-color: #ff4500;
+          background: linear-gradient(135deg, #fff5ee, #ffe4e1);
+        }
+
+        &.accuracy-card {
+          border-color: #32cd32;
+          background: linear-gradient(135deg, #f0fff0, #e8f5e8);
+        }
+
+        .stat-icon {
+          font-size: 2.5em;
+          margin-bottom: 10px;
+          animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        .stat-value {
+          font-size: 2em;
+          font-weight: bold;
+          color: #d63384;
+          text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.6);
+          margin-bottom: 5px;
+        }
+
+        .stat-label {
+          font-size: 0.9em;
+          color: #8b4a8b;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+        .stat-rank {
+          font-size: 0.8em;
+          color: #ff6347;
+          font-weight: bold;
+          background: linear-gradient(135deg, #fff, #ffe4e1);
+          padding: 4px 8px;
+          border-radius: 10px;
+          border: 1px solid #ff6347;
+        }
+
+        .stat-progress {
+          width: 100%;
+          height: 6px;
+          background: #e0e0e0;
+          border-radius: 3px;
+          overflow: hidden;
+          margin-top: 8px;
+
+          .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #00ced1, #20b2aa);
+            border-radius: 3px;
+            transition: width 1s ease;
+          }
+        }
+
+        .streak-flames {
+          display: flex;
+          justify-content: center;
+          gap: 2px;
+          margin-top: 5px;
+          font-size: 0.8em;
+          animation: flameFlicker 0.5s ease-in-out infinite alternate;
+        }
+
+        .accuracy-circle {
+          width: 40px;
+          height: 40px;
+          margin: 5px auto 0;
+
+          .circular-chart {
+            width: 100%;
+            height: 100%;
+
+            .circle-bg {
+              fill: none;
+              stroke: #e0e0e0;
+              stroke-width: 2;
+            }
+
+            .circle {
+              fill: none;
+              stroke: #32cd32;
+              stroke-width: 2;
+              stroke-linecap: round;
+              animation: progressFill 2s ease-in-out;
+            }
+          }
+        }
+      }
+    }
+
+    .achievement-showcase {
+      margin: 25px 0;
+      background: linear-gradient(135deg, #fff8dc, #ffefd5);
+      border: 3px solid #ffd700;
+      border-radius: 20px;
+      padding: 20px;
+
+      .showcase-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #8b4513;
+        margin-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      }
+
+      .badge-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        .achievement-badge {
+          background: linear-gradient(135deg, #fff, #ffeef8);
+          border: 2px solid #ff69b4;
+          border-radius: 15px;
+          padding: 15px;
+          text-align: center;
+          min-width: 80px;
+          transition: all 0.3s ease;
+          animation: badgeGlow 3s ease-in-out infinite;
+
+          &:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5);
+          }
+
+          .badge-icon {
+            font-size: 2em;
+            margin-bottom: 5px;
+            animation: badgeRotate 4s linear infinite;
+          }
+
+          .badge-name {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #8b4a8b;
+          }
+        }
+      }
+    }
+
+    .motivation-section {
+      margin: 25px 0;
+      background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+      border: 3px solid #32cd32;
+      border-radius: 20px;
+      padding: 20px;
+
+      .motivation-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #228b22;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      }
+
+      .challenge-text {
+        font-size: 1.1em;
+        color: #2e8b57;
+        font-weight: bold;
+      }
+    }
+
+    .share-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 25px 0;
+
+      .share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &.whatsapp-btn {
+          background: linear-gradient(135deg, #25d366, #128c7e);
+          color: white;
+          box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+
+          &:hover {
+            background: linear-gradient(135deg, #128c7e, #075e54);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
+          }
+
+          .btn-shimmer {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+              45deg,
+              transparent,
+              rgba(255, 255, 255, 0.2),
+              transparent
+            );
+            animation: shareShimmer 2s infinite;
+          }
+        }
+
+        &.general-btn {
+          background: linear-gradient(135deg, #ff6b9d, #c44569);
+          color: white;
+          box-shadow: 0 6px 18px rgba(255, 107, 157, 0.4);
+
+          &:hover {
+            background: linear-gradient(135deg, #ff5582, #b83d5a);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.6);
+          }
+        }
+
+        &.copy-btn {
+          background: linear-gradient(135deg, #6c757d, #495057);
+          color: white;
+          box-shadow: 0 6px 18px rgba(108, 117, 125, 0.4);
+
+          &:hover {
+            background: linear-gradient(135deg, #5a6268, #3d4043);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 117, 125, 0.6);
+          }
+        }
+
+        .btn-icon {
+          font-size: 1.2em;
+        }
+
+        .btn-text {
+          font-size: 1em;
+        }
+      }
+    }
+
+    .share-decorations {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+
+      .floating-emoji {
+        position: absolute;
+        font-size: 1.5em;
+        animation: floatEmoji 6s ease-in-out infinite;
+        opacity: 0.7;
+
+        &:nth-child(1) {
+          top: 10%;
+          left: 10%;
+          animation-delay: 0s;
+        }
+        &:nth-child(2) {
+          top: 20%;
+          right: 15%;
+          animation-delay: 1s;
+        }
+        &:nth-child(3) {
+          top: 60%;
+          left: 5%;
+          animation-delay: 2s;
+        }
+        &:nth-child(4) {
+          top: 70%;
+          right: 10%;
+          animation-delay: 3s;
+        }
+        &:nth-child(5) {
+          top: 30%;
+          left: 20%;
+          animation-delay: 4s;
+        }
+        &:nth-child(6) {
+          top: 80%;
+          right: 20%;
+          animation-delay: 5s;
+        }
+        &:nth-child(7) {
+          top: 40%;
+          right: 5%;
+          animation-delay: 1.5s;
+        }
+        &:nth-child(8) {
+          top: 90%;
+          left: 15%;
+          animation-delay: 2.5s;
+        }
+      }
+    }
+  }
+}
+
+// Share Overlay Animations
+@keyframes avatarFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes avatarLegendary {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes characterBounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes crownShine {
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+  50% {
+    transform: rotate(5deg) scale(1.1);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes flameFlicker {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes progressFill {
+  0% {
+    stroke-dasharray: 0, 100;
+  }
+  100% {
+    stroke-dasharray: var(--progress, 0), 100;
+  }
+}
+
+@keyframes badgeGlow {
+  0%,
+  100% {
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
+  }
+}
+
+@keyframes badgeRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes floatEmoji {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-10px) rotate(90deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-5px) rotate(180deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-15px) rotate(270deg);
+    opacity: 0.9;
+  }
+}
+
+// Mobile responsive for Share Overlay
+@media (max-width: 768px) {
+  .share-overlay {
+    padding: 10px;
+
+    .share-content {
+      padding: 20px;
+      max-width: 100%;
+      margin: 0;
+
+      .share-header {
+        margin-bottom: 20px;
+
+        .share-title {
+          font-size: 1.5em;
+        }
+
+        .share-subtitle {
+          font-size: 1em;
+        }
+      }
+
+      .avatar-section {
+        margin: 20px 0;
+
+        .avatar-container {
+          .avatar-background {
+            width: 100px;
+            height: 100px;
+
+            .avatar-character {
+              font-size: 3em;
+            }
+
+            .avatar-crown {
+              font-size: 1.5em;
+            }
+
+            .avatar-sparkles {
+              font-size: 1.2em;
+            }
+          }
+
+          .avatar-level {
+            font-size: 1.1em;
+            padding: 6px 15px;
+          }
+        }
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 20px 0;
+
+        .stat-card {
+          padding: 15px;
+
+          .stat-icon {
+            font-size: 2em;
+          }
+
+          .stat-value {
+            font-size: 1.5em;
+          }
+        }
+      }
+
+      .achievement-showcase {
+        margin: 20px 0;
+        padding: 15px;
+
+        .showcase-title {
+          font-size: 1.1em;
+        }
+
+        .badge-container {
+          gap: 10px;
+
+          .achievement-badge {
+            padding: 10px;
+            min-width: 60px;
+
+            .badge-icon {
+              font-size: 1.5em;
+            }
+
+            .badge-name {
+              font-size: 0.7em;
+            }
+          }
+        }
+      }
+
+      .motivation-section {
+        margin: 20px 0;
+        padding: 15px;
+
+        .motivation-text {
+          font-size: 1em;
+        }
+
+        .challenge-text {
+          font-size: 0.9em;
+        }
+      }
+
+      .share-buttons {
+        margin: 20px 0;
+        gap: 12px;
+
+        .share-btn {
+          padding: 12px 20px;
+          font-size: 14px;
+
+          .btn-icon {
+            font-size: 1.1em;
+          }
+        }
+      }
+
+      .share-decorations {
+        .floating-emoji {
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+}
+
 // Mobile responsive for Achievement Popup
 @media (max-width: 768px) {
   .achievement-overlay {

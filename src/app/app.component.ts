@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
   isAnswering: boolean = false;
   showConfetti: boolean = false;
   showHallOfFameOverlay: boolean = false;
+  showShareOverlay: boolean = false;
 
   ngOnInit(): void {
     this.loadTopScores();
@@ -687,44 +688,8 @@ export class AppComponent implements OnInit {
   }
 
   shareWithFriends() {
-    // Create an engaging, fun share message
-    const achievements = this.getShareableAchievements();
-    const encouragement = this.getEncouragingMessage();
-    const challenge = this.getFriendChallenge();
-
-    const shareText = `${this.getShareEmoji()} ${encouragement}
-
-🎯 הציון שלי: ${this.score} נקודות!
-💎 יהלומים: ${this.gems}
-🏆 רמה: ${this.level}
-🔥 הרצף הכי טוב: ${this.bestStreak}
-✅ תשובות נכונות: ${this.correctAnswers}/${this.totalQuestions}
-
-${achievements}
-
-${challenge}
-
-בואו תנסו גם! זה משחק הכפל הכי מגניב! 🚀
-${window.location.href}
-
-#משחק_כפל #מתמטיקה_מגניבה #חברות_לנצח`;
-
-    // Try WhatsApp first, then fallback to general sharing
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-
-    // Check if we're on mobile
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
-
-    if (isMobile) {
-      // On mobile, try to open WhatsApp directly
-      window.open(whatsappUrl, "_blank");
-    } else {
-      // On desktop, show options
-      this.showShareOptions(shareText, whatsappUrl);
-    }
+    // Show the enhanced graphic share overlay
+    this.showShareOverlay = true;
   }
 
   getShareEmoji(): string {
@@ -817,5 +782,150 @@ ${window.location.href}
     navigator.clipboard.writeText(text).then(() => {
       alert("הטקסט הועתק! עכשיו את יכולה להדביק אותו בכל מקום! 📱");
     });
+  }
+
+  // Enhanced Share Overlay Methods
+  closeShareOverlay() {
+    this.showShareOverlay = false;
+  }
+
+  getAvatarTheme(): string {
+    if (this.score >= 90) return "avatar-legendary";
+    if (this.score >= 80) return "avatar-epic";
+    if (this.score >= 60) return "avatar-rare";
+    if (this.score >= 40) return "avatar-uncommon";
+    return "avatar-common";
+  }
+
+  getAvatarCharacter(): string {
+    if (this.score >= 90) return "👸";
+    if (this.score >= 80) return "🧚‍♀️";
+    if (this.score >= 60) return "🦄";
+    if (this.score >= 40) return "🌟";
+    return "😊";
+  }
+
+  getScoreRank(): string {
+    if (this.score >= 90) return "אגדית!";
+    if (this.score >= 80) return "מדהימה!";
+    if (this.score >= 60) return "מעולה!";
+    if (this.score >= 40) return "טובה!";
+    return "התחלה נהדרת!";
+  }
+
+  getAccuracyPercentage(): number {
+    if (this.totalQuestions === 0) return 0;
+    return Math.round((this.correctAnswers / this.totalQuestions) * 100);
+  }
+
+  getTopAchievements(): string[] {
+    return this.achievements.slice(0, 3); // Show top 3 achievements
+  }
+
+  getAchievementIcon(achievement: string): string {
+    const icons = {
+      first_correct: "🌟",
+      streak_3: "🔥",
+      streak_5: "⚡",
+      streak_10: "🚀",
+      perfect_game: "👑",
+      lightning_fast: "⚡",
+      gem_collector_50: "💎",
+      gem_collector_100: "💎",
+      level_5: "⭐",
+      level_10: "🌟",
+      perfectionist: "✨",
+    };
+    return icons[achievement as keyof typeof icons] || "🏆";
+  }
+
+  getAchievementShortTitle(achievement: string): string {
+    const titles = {
+      first_correct: "התחלה",
+      streak_3: "רצף 3",
+      streak_5: "רצף 5",
+      streak_10: "רצף 10",
+      perfect_game: "מושלם",
+      lightning_fast: "מהירה",
+      gem_collector_50: "אספנית",
+      gem_collector_100: "מלכה",
+      level_5: "רמה 5",
+      level_10: "רמה 10",
+      perfectionist: "מושלמת",
+    };
+    return titles[achievement as keyof typeof titles] || "הישג";
+  }
+
+  getMotivationalMessage(): string {
+    const messages = [
+      "את פשוט מדהימה במתמטיקה! 🌟",
+      "איזה כישרון יש לך! 💫",
+      "את הוכחת שמתמטיקה זה כיף! 🎉",
+      "הישגים כאלה מראים כמה את מוכשרת! ✨",
+      "את מקור השראה לכל הבנות! 👑",
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }
+
+  getFloatingEmojis(): string[] {
+    return ["✨", "🌟", "💫", "🎉", "💖", "🦄", "🌈", "👑"];
+  }
+
+  shareToWhatsApp() {
+    const shareText = this.generateGraphicShareText();
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    window.open(whatsappUrl, "_blank");
+  }
+
+  shareToGeneral() {
+    const shareText = this.generateGraphicShareText();
+    if (navigator.share) {
+      navigator.share({
+        title: "משחק הכפל הקסום",
+        text: shareText,
+        url: window.location.href,
+      });
+    } else {
+      this.copyShareText();
+    }
+  }
+
+  copyShareText() {
+    const shareText = this.generateGraphicShareText();
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert("הטקסט הועתק! 📋");
+    });
+  }
+
+  generateGraphicShareText(): string {
+    const avatar = this.getAvatarCharacter();
+    const rank = this.getScoreRank();
+    const achievements = this.getTopAchievements();
+    const motivational = this.getMotivationalMessage();
+    const challenge = this.getFriendChallenge();
+
+    let achievementText = "";
+    if (achievements.length > 0) {
+      achievementText = `\n🏆 ההישגים שלי:\n${achievements
+        .map(
+          (a) => `${this.getAchievementIcon(a)} ${this.getAchievementTitle(a)}`
+        )
+        .join("\n")}\n`;
+    }
+
+    return `${avatar} ${motivational}
+
+🎯 הציון שלי: ${this.score} נקודות (${rank})
+💎 יהלומים: ${this.gems}
+🏆 רמה: ${this.level}
+🔥 רצף הכי טוב: ${this.bestStreak}
+🎯 דיוק: ${this.getAccuracyPercentage()}%
+${achievementText}
+${challenge}
+
+בואו תנסו גם את משחק הכפל הכי מגניב! 🚀
+${window.location.href}
+
+#משחק_כפל #מתמטיקה_מגניבה #חברות_לנצח`;
   }
 }
