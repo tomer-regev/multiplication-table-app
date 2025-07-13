@@ -31,6 +31,41 @@
           <div class="indicator-label">טעויות נותרות</div>
         </div>
       </div>
+
+      <!-- Addictive features row -->
+      <div class="addictive-indicators">
+        <div class="indicator gems-indicator">
+          <div class="indicator-icon">💎</div>
+          <div class="indicator-value">{{ gems }}</div>
+          <div class="indicator-label">יהלומים</div>
+        </div>
+        
+        <div class="indicator level-indicator">
+          <div class="indicator-icon">🏆</div>
+          <div class="indicator-value">{{ level }}</div>
+          <div class="indicator-label">רמה</div>
+        </div>
+        
+        <div class="indicator streak-indicator" [ngClass]="{'streak-active': streak > 0}">
+          <div class="indicator-icon">🔥</div>
+          <div class="indicator-value">{{ streak }}</div>
+          <div class="indicator-label">רצף</div>
+        </div>
+
+        <div class="indicator combo-indicator" *ngIf="currentComboMultiplier > 1">
+          <div class="indicator-icon">⚡</div>
+          <div class="indicator-value">x{{ currentComboMultiplier.toFixed(1) }}</div>
+          <div class="indicator-label">COMBO</div>
+        </div>
+      </div>
+
+      <!-- Experience bar -->
+      <div class="experience-bar" *ngIf="!isGameOver">
+        <div class="exp-label">רמה {{ level }} - {{ experiencePoints }}/{{ experienceToNextLevel }} XP</div>
+        <div class="exp-bar">
+          <div class="exp-fill" [style.width.%]="(experiencePoints / experienceToNextLevel) * 100"></div>
+        </div>
+      </div>
       
       <!-- Hints indicator -->
       <div class="hints-indicator">
@@ -119,6 +154,21 @@
         עוד אין כוכבות כאן... את יכולה להיות הראשונה! ✨
       </div>
       <button (click)="hideHallOfFame()" class="close-hall-button">❌ סגרי</button>
+    </div>
+  </div>
+
+  <!-- Achievement Popup -->
+  <div *ngIf="showAchievementPopup" class="achievement-overlay">
+    <div class="achievement-content">
+      <h3>🎉 הישג חדש! 🎉</h3>
+      <div class="achievement-list">
+        <div *ngFor="let achievement of newAchievements" class="achievement-item">
+          <div class="achievement-icon">🏆</div>
+          <div class="achievement-title">{{ getAchievementTitle(achievement) }}</div>
+        </div>
+      </div>
+      <div class="achievement-reward">+{{ newAchievements.length * 10 }} יהלומים! 💎</div>
+      <button (click)="closeAchievementPopup()" class="achievement-close">🎯 מעולה!</button>
     </div>
   </div>
 

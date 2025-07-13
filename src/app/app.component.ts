@@ -42,6 +42,23 @@ export class AppComponent implements OnInit {
   averageResponseTime: number = 0;
   perfectAnswers: number = 0; // Answers without hints and with time bonus
 
+  // Addictive game features
+  achievements: string[] = [];
+  newAchievements: string[] = [];
+  showAchievementPopup: boolean = false;
+  totalGamesPlayed: number = 0;
+  totalCorrectAnswers: number = 0;
+  fastestAnswer: number = 999;
+  currentComboMultiplier: number = 1;
+  gems: number = 0;
+  level: number = 1;
+  experiencePoints: number = 0;
+  experienceToNextLevel: number = 100;
+  unlockedThemes: string[] = ["princess"];
+  currentTheme: string = "princess";
+  dailyStreak: number = 0;
+  lastPlayDate: string = "";
+
   // Player and scoring
   playerName: string = "";
   showNameInput: boolean = false;
@@ -136,28 +153,80 @@ export class AppComponent implements OnInit {
     clearInterval(this.timer);
 
     const isCorrect = this.userAnswer === this.currentQuestion?.answer;
+    const responseTime = this.timeLimit - this.timeLeft;
 
     if (isCorrect) {
       this.correctAnswers++;
+      this.totalCorrectAnswers++;
+      this.streak++;
 
-      // Calculate score: reduced points if hint was used
+      // Update best streak
+      if (this.streak > this.bestStreak) {
+        this.bestStreak = this.streak;
+      }
+
+      // Calculate combo multiplier based on streak
+      this.currentComboMultiplier = Math.min(
+        1 + Math.floor(this.streak / 3) * 0.5,
+        3
+      );
+
+      // Calculate score with combo multiplier
       const basePoints = this.hintUsed ? 5 : 10;
-      const timeBonus = this.timeLeft; // 1 point per second remaining
-      const questionScore = basePoints + timeBonus;
+      const timeBonus = this.timeLeft;
+      const comboBonus = Math.floor(
+        basePoints * (this.currentComboMultiplier - 1)
+      );
+      const questionScore = Math.floor(
+        (basePoints + timeBonus + comboBonus) * this.currentComboMultiplier
+      );
       this.score += questionScore;
 
-      const correctMessages = [
-        `🎉 יאללה! נכון! +${questionScore} נקודות`,
-        `🔥 מדליק! נכון! +${questionScore} נקודות`,
-        `⭐ וואו! נכון! +${questionScore} נקודות`,
-        `💪 חזק! נכון! +${questionScore} נקודות`,
-        `🚀 מושלם! נכון! +${questionScore} נקודות`,
-      ];
-      const randomMessage =
-        correctMessages[Math.floor(Math.random() * correctMessages.length)];
-      this.showFeedbackAnimation("correct", randomMessage);
+      // Award gems for good performance
+      let gemsEarned = 1;
+      if (!this.hintUsed && this.timeLeft > 10) {
+        gemsEarned = 3; // Perfect answer
+        this.perfectAnswers++;
+      } else if (!this.hintUsed) {
+        gemsEarned = 2; // Good answer
+      }
+      this.gems += gemsEarned;
+
+      // Add experience points
+      this.experiencePoints += Math.floor(questionScore / 2);
+      this.checkLevelUp();
+
+      // Track fastest answer
+      if (responseTime < this.fastestAnswer) {
+        this.fastestAnswer = responseTime;
+      }
+
+      // Create enhanced feedback message
+      let correctMessage = "";
+      if (this.streak >= 5) {
+        correctMessage = `🔥 COMBO x${this.currentComboMultiplier.toFixed(
+          1
+        )}! רצף של ${this.streak}! +${questionScore} נקודות +${gemsEarned}💎`;
+      } else if (this.streak >= 3) {
+        correctMessage = `⚡ רצף מדליק! ${this.streak} ברצף! +${questionScore} נקודות +${gemsEarned}💎`;
+      } else {
+        const messages = [
+          `🎉 יאללה! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 מדליק! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⭐ וואו! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `💪 חזק! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🚀 מושלם! נכון! +${questionScore} נקודות +${gemsEarned}💎`,
+        ];
+        correctMessage = messages[Math.floor(Math.random() * messages.length)];
+      }
+
+      this.showFeedbackAnimation("correct", correctMessage);
+      this.checkAchievements();
     } else {
       this.wrongAnswers++;
+      this.streak = 0; // Reset streak on wrong answer
+      this.currentComboMultiplier = 1;
+
       const { num1, num2 } = this.getNumbersFromQuestion();
       const correctAnswer = this.currentQuestion?.answer;
       const hint = this.getHintForNumbers({ num1, num2 });
@@ -442,6 +511,178 @@ export class AppComponent implements OnInit {
     // Resume the timer if game is still active
     if (!this.isGameOver && !this.isAnswering) {
       this.startTimer();
+    }
+  }
+
+  // Addictive game mechanics
+  checkLevelUp() {
+    if (this.experiencePoints >= this.experienceToNextLevel) {
+      this.level++;
+      this.experiencePoints -= this.experienceToNextLevel;
+      this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.5);
+
+      // Award gems for leveling up
+      this.gems += this.level * 5;
+
+      // Show level up celebration
+      this.showLevelUpCelebration();
+
+      // Unlock new themes at certain levels
+      this.checkThemeUnlocks();
+    }
+  }
+
+  checkAchievements() {
+    const newAchievements: string[] = [];
+
+    // First time achievements
+    if (
+      this.totalCorrectAnswers === 1 &&
+      !this.achievements.includes("first_correct")
+    ) {
+      newAchievements.push("first_correct");
+      this.achievements.push("first_correct");
+    }
+
+    // Streak achievements
+    if (this.streak === 3 && !this.achievements.includes("streak_3")) {
+      newAchievements.push("streak_3");
+      this.achievements.push("streak_3");
+    }
+    if (this.streak === 5 && !this.achievements.includes("streak_5")) {
+      newAchievements.push("streak_5");
+      this.achievements.push("streak_5");
+    }
+    if (this.streak === 10 && !this.achievements.includes("streak_10")) {
+      newAchievements.push("streak_10");
+      this.achievements.push("streak_10");
+    }
+
+    // Perfect game achievement
+    if (
+      this.correctAnswers === this.totalQuestions &&
+      this.wrongAnswers === 0 &&
+      !this.achievements.includes("perfect_game")
+    ) {
+      newAchievements.push("perfect_game");
+      this.achievements.push("perfect_game");
+    }
+
+    // Speed achievements
+    if (
+      this.fastestAnswer <= 3 &&
+      !this.achievements.includes("lightning_fast")
+    ) {
+      newAchievements.push("lightning_fast");
+      this.achievements.push("lightning_fast");
+    }
+
+    // Gem collector achievements
+    if (this.gems >= 50 && !this.achievements.includes("gem_collector_50")) {
+      newAchievements.push("gem_collector_50");
+      this.achievements.push("gem_collector_50");
+    }
+    if (this.gems >= 100 && !this.achievements.includes("gem_collector_100")) {
+      newAchievements.push("gem_collector_100");
+      this.achievements.push("gem_collector_100");
+    }
+
+    // Level achievements
+    if (this.level >= 5 && !this.achievements.includes("level_5")) {
+      newAchievements.push("level_5");
+      this.achievements.push("level_5");
+    }
+    if (this.level >= 10 && !this.achievements.includes("level_10")) {
+      newAchievements.push("level_10");
+      this.achievements.push("level_10");
+    }
+
+    // Perfect answers achievement
+    if (
+      this.perfectAnswers >= 5 &&
+      !this.achievements.includes("perfectionist")
+    ) {
+      newAchievements.push("perfectionist");
+      this.achievements.push("perfectionist");
+    }
+
+    // Show achievement popup if new achievements unlocked
+    if (newAchievements.length > 0) {
+      this.newAchievements = newAchievements;
+      this.showAchievementPopup = true;
+      this.gems += newAchievements.length * 10; // Bonus gems for achievements
+    }
+  }
+
+  showLevelUpCelebration() {
+    const levelUpMessage = `🎉 עלית רמה! רמה ${this.level}! 🎉\n+${
+      this.level * 5
+    } יהלומים! 💎`;
+    this.showFeedbackAnimation("correct", levelUpMessage);
+  }
+
+  checkThemeUnlocks() {
+    const themeUnlocks = [
+      { level: 3, theme: "unicorn", name: "חד-קרן קסום" },
+      { level: 5, theme: "rainbow", name: "קשת בענן" },
+      { level: 7, theme: "fairy", name: "פיה קטנה" },
+      { level: 10, theme: "mermaid", name: "בת ים" },
+    ];
+
+    themeUnlocks.forEach((unlock) => {
+      if (
+        this.level >= unlock.level &&
+        !this.unlockedThemes.includes(unlock.theme)
+      ) {
+        this.unlockedThemes.push(unlock.theme);
+        // Show theme unlock notification
+        setTimeout(() => {
+          alert(`🎨 נפתח עיצוב חדש: ${unlock.name}! 🎨`);
+        }, 2000);
+      }
+    });
+  }
+
+  getAchievementTitle(achievementId: string): string {
+    const achievements = {
+      first_correct: "🌟 התחלה מושלמת!",
+      streak_3: "🔥 רצף של 3!",
+      streak_5: "⚡ רצף מדליק!",
+      streak_10: "🚀 רצף אגדי!",
+      perfect_game: "👑 משחק מושלם!",
+      lightning_fast: "⚡ מהירות הברק!",
+      gem_collector_50: "💎 אספנית יהלומים!",
+      gem_collector_100: "💎 מלכת היהלומים!",
+      level_5: "⭐ רמה 5!",
+      level_10: "🌟 רמה 10!",
+      perfectionist: "✨ פרפקציוניסטית!",
+    };
+    return (
+      achievements[achievementId as keyof typeof achievements] || achievementId
+    );
+  }
+
+  closeAchievementPopup() {
+    this.showAchievementPopup = false;
+    this.newAchievements = [];
+  }
+
+  shareScore() {
+    const shareText = `🎉 זכיתי ב-${this.score} נקודות במשחק הכפל הכי מגניב! 💎 יש לי ${this.gems} יהלומים ואני ברמה ${this.level}! בואו תנסו גם! 🚀`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: "משחק הכפל הקסום",
+        text: shareText,
+        url: window.location.href,
+      });
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard
+        .writeText(shareText + " " + window.location.href)
+        .then(() => {
+          alert("הציון הועתק! שתפי עם החברות שלך! 📱");
+        });
     }
   }
 }
