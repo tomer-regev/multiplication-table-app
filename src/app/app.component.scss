@@ -3204,29 +3204,32 @@
   }
 }
 
-// Shareable Card Styles (Mobile-Optimized)
+// Shareable Card Styles (Mobile-Optimized for WhatsApp)
 .shareable-card {
   background: linear-gradient(135deg, #fff8dc, #ffefd5, #fff0f8);
-  border: 3px solid #ff69b4;
-  border-radius: 20px;
-  padding: 20px;
+  border: 4px solid #ff69b4;
+  border-radius: 25px;
+  padding: 25px;
   width: 100%;
-  max-width: 380px;
-  min-width: 320px;
-  margin: 10px auto;
-  box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+  max-width: 400px;
+  min-width: 350px;
+  margin: 15px auto;
+  box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5);
   position: relative;
   text-align: center;
   font-family: "Heebo", "Rubik", "Segoe UI", "Comic Sans MS", cursive, Arial,
     sans-serif;
   direction: rtl;
   unicode-bidi: embed;
-  aspect-ratio: 4/5; // Better aspect ratio for mobile sharing
+  aspect-ratio: 3/4; // Perfect for mobile sharing - no scrolling needed
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
   box-sizing: border-box;
+  // Enhanced for image sharing
+  background-size: cover;
+  background-attachment: fixed;
 
   .shareable-header {
     flex-shrink: 0;

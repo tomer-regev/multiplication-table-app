@@ -124,6 +124,11 @@ export class AppComponent implements OnInit {
     return this.playerGender === "male" ? maleText : femaleText;
   }
 
+  // More nuanced gender-aware text for teens
+  getTeenGenderText(maleText: string, femaleText: string): string {
+    return this.playerGender === "male" ? maleText : femaleText;
+  }
+
   getGenderClass(): string {
     return this.playerGender === "male" ? "male-theme" : "female-theme";
   }
@@ -251,24 +256,24 @@ export class AppComponent implements OnInit {
         );
       } else {
         const maleMessages = [
-          `🎉 בום! נכון! אתה גאון! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🔥 וואו! המוח שלך זה פצצה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `⭐ יש! אתה מלך! +${questionScore} נקודות +${gemsEarned}💎`,
-          `💪 חזק! אתה מכונת חישוב! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🚀 מטורף! אתה עף! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🎯 בול! אתה חד כמו חץ! +${questionScore} נקודות +${gemsEarned}💎`,
-          `⚔️ אגדי! אתה לוחם מתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🦅 מושלם! אתה נשר של המספרים! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 נדיר אחי! אתה פשוט כמו מבפה! מלך הכדורגל של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 חזק! אתה מהיר יותר מהאלנד! גם פ.ס.ז' היה רוצה אותך! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⚡ וואלה מטורף! אתה כמו מר ביסט אבל עם מתמטיקה! מיליון דולר של כישרון! +${questionScore} נקודות +${gemsEarned}💎`,
+          `💪 חרא איזה חזק! אתה פשוט נושא את הצוות כמו מסי! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🚀 מטורף לגמרי! אתה עף יותר מספיידרמן! גם טום הולנד היה מקנא! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎮 נדיר של נדיר! אתה פשוט פיודיפיי של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⚔️ איזה חזק אחי! אתה כמו רונאלדו שכובש גול! SIUUUU! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 בלי קשר איזה חזק! אתה פשוט ויראלי במתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
         ];
         const femaleMessages = [
-          `🎉 בום! נכון! את גאונית! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🔥 וואו! המוח שלך זה פצצה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `⭐ יש! את מלכה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `💪 חזק! את מכונת חישוב! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🚀 מטורף! את עפה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🎯 בול! את חדה כמו חץ! +${questionScore} נקודות +${gemsEarned}💎`,
-          `✨ קסם! את קוסמת במתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
-          `🦄 אגדי! את חד-קרן של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 נדיר אחותי! את פשוט כמו צ'רלי דמליו! ויראלית במתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🔥 חזק! את כמו אדיסון ריי אבל עם מספרים! המוח שלך זה טיק טוק של גאונות! +${questionScore} נקודות +${gemsEarned}💎`,
+          `⚡ וואלה מטורף! את מהירה יותר מטיילור סוויפט שכותבת שיר על האקס! +${questionScore} נקודות +${gemsEarned}💎`,
+          `💪 חרא איזה חזק! את פשוט כמו אריאנה גרנדה של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🚀 מטורף לגמרי! את עפה יותר מאמה ווטסון בהארי פוטר! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎮 נדיר של נדיר! את פשוט פוקימיין של המתמטיקה! +${questionScore} נקודות +${gemsEarned}💎`,
+          `✨ איזה חזק אחותי! את כמו זנדיה בספיידרמן! +${questionScore} נקודות +${gemsEarned}💎`,
+          `🎯 בלי קשר איזה חזק! את פשוט בילי איליש של הכפל! +${questionScore} נקודות +${gemsEarned}💎`,
         ];
         const messages =
           this.playerGender === "male" ? maleMessages : femaleMessages;
@@ -287,18 +292,18 @@ export class AppComponent implements OnInit {
       const hint = this.getHintForNumbers({ num1, num2 });
 
       const maleWrongMessages = [
-        `🤔 אופס! לא הפעם... אבל זה בסדר, גם איינשטיין טעה לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `😅 אוי לא! קרוב אבל לא מספיק... המוח שלך עדיין מתחמם!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `🙃 נו טוב, לא כל אחד יכול להיות מחשבון אנושי!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `🤷‍♂️ זה קורה לטובים שבבנים! בוא ננסה שוב!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `😊 לא נורא! גם סופר-גיבורים לומדים מטעויות!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤔 אוף אחי! פספסת... אבל וואלה, גם מבפה פספס פנדל לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😅 אוי לא! קרוב אבל לא מספיק... גם מר ביסט צריך כמה ניסיונות לפני שהוא מנצח!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🙃 סבבה אחי, לא כל אחד יכול להיות מחשבון אנושי כמו פיודיפיי... עדיין!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤷‍♂️ זה קורה לכולם! גם רונאלדו פספס גולים לפני שהוא הפך לגדול!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😏 בלי קשר אחי! גם הסטרימרים הכי טובים נכשלים לפעמים! RESPAWN!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
       ];
       const femaleWrongMessages = [
-        `🤔 אופס! לא הפעם... אבל זה בסדר, גם איינשטיין טעה לפעמים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `😅 אוי לא! קרוב אבל לא מספיק... המוח שלך עדיין מתחמם!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `🙃 נו טוב, לא כל אחת יכולה להיות מחשבון אנושי!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `🤷‍♀️ זה קורה לטובות שבנות! בואי ננסה שוב!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
-        `😊 לא נורא! גם סופר-גיבורות לומדות מטעויות!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤔 אוף אחותי! פספסת... אבל וואלה, גם צ'רלי דמליו לא תמיד מצליחה בטיק טוק מהפעם הראשונה!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😅 אוי לא! קרוב אבל לא מספיק... גם טיילור סוויפט הייתה צריכה להתאמן לפני שהיא הפכה לכוכבת!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🙃 סבבה אחותי, לא כל אחת יכולה להיות מחשבון אנושי כמו אלקסה... עדיין!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `🤷‍♀️ זה קורה לכולן! גם לאריאנה גרנדה יש שירים שלא הופכים ויראליים!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
+        `😏 בלי קשר אחותי! גם הטיק טוקריות הכי מצליחות נכשלות לפעמים! RESPAWN QUEEN!\n\nהתשובה הנכונה: ${correctAnswer}\n\n💡 ${hint}`,
       ];
       const wrongMessages =
         this.playerGender === "male" ? maleWrongMessages : femaleWrongMessages;
@@ -971,17 +976,29 @@ export class AppComponent implements OnInit {
   }
 
   getMotivationalMessage(): string {
-    const messages = [
-      "את פשוט אש במתמטיקה! המוח שלך זה מחשב-על! 🌟",
-      "וואו! איזה כישרון! את כמו קוסמת של המספרים! 💫",
-      "את הוכחת שמתמטיקה זה לא משעמם - זה מגניב! 🎉",
-      "הישגים כאלה? את פשוט גאונית! 🧠✨",
-      "את מקור השראה לכל הבנות! מלכת הכפל! 👑",
-      "המורה שלך תהיה בהלם מהכישרון שלך! 🤯",
-      "את כמו גיבורת-על של המתמטיקה! 🦸‍♀️",
-      "המוח שלך עובד מהר יותר מאייפון! 📱⚡",
+    const maleMessages = [
+      "אתה פשוט BEAST MODE במתמטיקה! כמו מבפה בגמר המונדיאל! 🌟",
+      "וואו! איזה כישרון! אתה כמו מר ביסט שמחלק מיליונים! אבל עם מספרים! 💫",
+      "אתה הוכחת שמתמטיקה זה לא משעמם - זה ממש ויראלי כמו טיק טוק! 🎉",
+      "הישגים כאלה? אתה פשוט גאון! גם פיודיפיי היה מתרשם! 🧠✨",
+      "אתה מקור השראה! מלך הכפל האמיתי! כמו רונאלדו של המתמטיקה! 👑",
+      "המורה שלך תהיה בהלם מהכישרון שלך! גם נטפליקס היו עושים עליך סדרה! 🤯",
+      "אתה כמו סטרימר של המתמטיקה! הכי מצליח ביוטיוב! 🥷",
+      "המוח שלך עובד מהר יותר מהאלנד שרץ לשער! 📱⚡",
     ];
-    return messages[Math.floor(Math.random() * messages.length)];
+    const femaleMessages = [
+      "את פשוט QUEEN במתמטיקה! כמו צ'רלי דמליו בטיק טוק! 🌟",
+      "וואו! איזה כישרון! את כמו טיילור סוויפט שכותבת שירים! אבל עם מספרים! 💫",
+      "את הוכחת שמתמטיקה זה לא משעמם - זה ממש ICONIC כמו אריאנה גרנדה! 🎉",
+      "הישגים כאלה? את פשוט גאונית! גם בילי איליש הייתה מקנאה! 🧠✨",
+      "את מקור השראה! מלכת הכפל האמיתית! כמו אדיסון ריי של המתמטיקה! 👑",
+      "המורה שלך תהיה בהלם מהכישרון שלך! גם נטפליקס היו עושים עליך סדרה! 🤯",
+      "את כמו אינפלואנסרית של המתמטיקה! הכי מצליחה באינסטגרם! 🥷",
+      "המוח שלך עובד מהר יותר מזנדיה בספיידרמן! PERIODT! 📱⚡",
+    ];
+    return this.playerGender === "male"
+      ? maleMessages[Math.floor(Math.random() * maleMessages.length)]
+      : femaleMessages[Math.floor(Math.random() * femaleMessages.length)];
   }
 
   getFloatingEmojis(): string[] {
